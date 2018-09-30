@@ -1,0 +1,68 @@
+1、error日志和info日志分开打印
+
+log4j.rootLogger=info,errorlog,business-log,console-log
+
+
+log4j.appender.business-log = org.apache.log4j.RollingFileAppender
+log4j.appender.business-log.MaxFileSize=500MB
+log4j.appender.business-log.MaxBackupIndex=3
+log4j.appender.business-log.Append=true
+log4j.appender.business-log.file = /data1/airflow/myscripts/indonesiaProductAutoShelve/gmv-log/busi/gmv-busi.log
+log4j.appender.business-log.layout=org.apache.log4j.PatternLayout
+log4j.appender.business-log.layout.ConversionPattern=%t [%-5p] %d{yyyy-MM-dd HH\:mm\:ss.SSS} %m%n
+log4j.appender.business-log.filter.B=org.apache.log4j.varia.LevelRangeFilter
+log4j.appender.business-log.filter.B.levelMax=WARN
+
+
+log4j.appender.errorlog = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.errorlog.file = /data1/airflow/myscripts/indonesiaProductAutoShelve/gmv-log/err/gmv-err.log
+log4j.appender.errorlog.layout=org.apache.log4j.PatternLayout
+log4j.appender.errorlog.layout.ConversionPattern=%t [%-5p] %d{yyyy-MM-dd HH\:mm\:ss.SSS} %m%n
+log4j.appender.errorlog.filter.B=org.apache.log4j.varia.LevelRangeFilter
+log4j.appender.errorlog.filter.B.levelMin=ERROR
+
+
+
+2、#局部日志等级:就近原则
+
+#log4j.logger.固定，后面添加想那个包使用不一样的日志等级
+
+#log4j.logger.cn.itsource.pss=debug
+
+============================================================
+
+log4j.rootLogger=ERROR,error
+#log4j.rootLogger=DEBUG
+
+#log4j.logger.com.jollychic.data = DEBUG,business,console
+log4j.logger.com.jollychic.data = DEBUG,business,console
+
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=[%-5p] %d{yyyy-MM-dd HH\:mm\:ss.SSS} %c %m%n
+
+log4j.appender.business = org.apache.log4j.RollingFileAppender
+log4j.appender.business.MaxFileSize=500MB
+log4j.appender.business.MaxBackupIndex=3
+log4j.appender.business.Append=true
+log4j.appender.business.file = ../jollylogs/busi/jolly-service-busi.log
+log4j.appender.business.layout=org.apache.log4j.PatternLayout
+log4j.appender.business.layout.ConversionPattern=%t [%-5p] %d{yyyy-MM-dd HH\:mm\:ss.SSS} %m%n
+log4j.appender.business.filter.B=org.apache.log4j.varia.LevelRangeFilter
+log4j.appender.business.filter.B.levelMax=WARN
+
+log4j.appender.error = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.error.file = ../jollylogs/err/jolly-service-err.log
+log4j.appender.error.layout=org.apache.log4j.PatternLayout
+log4j.appender.error.layout.ConversionPattern=%t [%-5p] %d{yyyy-MM-dd HH\:mm\:ss.SSS} %m%n
+
+
+#Spring
+log4j.logger.org.springframework=WARN,error
+log4j.logger.org.apache=WARN,error
+log4j.logger.org.apache.commons=WARN,error
+log4j.logger.com.alibaba.dubbo=WARN,error
+
+
+
+
