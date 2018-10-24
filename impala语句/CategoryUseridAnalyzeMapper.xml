@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jollychic.data.yuce.server.usercategory.mapper.impala.CategoryUseridAnalyzeMapper">
+    <!-- 自定义返回结果集 -->
+    <resultMap id="CategoryUseridAnalyzeResultMap" type="CategoryUseridAnalyzeDO">
+        <result property="tagid" column="tagid" javaType="java.lang.String"/>
+        <result property="userid" column="userid" javaType="java.lang.String"/>
+        <result property="tagweight" column="tagweight" javaType="java.lang.Double"/>
+        <result property="categoryId" column="categoryId" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <insert id="copyUserIdCategory" statementType="STATEMENT"> 
+        insert overwrite dw.dw_category_userid_analyze PARTITION(categoryId = ${categoryId})
+        select  tagid, userid, tagweight  from dw.dw_profile_tag_user_userid_service
+        where data_date = '${dataDate}' and  userid in ( select utc.userid  from dw.dw_profile_tag_user_userid_service utc
+        <foreach collection="conditionList" item="condition" index="index"
+                 open="JOIN ( SELECT userid FROM dw.dw_profile_tag_user_userid_service WHERE " close=""
+                 separator="JOIN ( SELECT userid FROM dw.dw_profile_tag_user_userid_service WHERE">
+            ${condition} ) utc${index} ON utc.userid = utc${index}.userid
+        </foreach>
+        <where>
+            <if test="firstCondition != null">
+                ${firstCondition}
+            </if>
+        </where>
+        )
+    </insert>
+
+    <update id="computeUseridAnalyze" statementType="STATEMENT">
+        compute incremental stats dw.dw_category_userid_analyze partition (categoryId = ${categoryId})
+    </update>
+
+    <select id="analyzeCategoryStructure"  statementType="STATEMENT" resultType="com.jollychic.data.yuce.common.model.usercategory.dos.impala.AnalyzeCategoryStructureDO"> 
+        ${analyzeCategoryStructureSql}
+    </select>
+
+    <!-- 根据分群id查询，分群id的人数 -->
+    <select id="countByCategoryIds" statementType="STATEMENT" resultType="com.jollychic.data.yuce.common.model.usercategory.dos.impala.CategoryNumDO">
+        select categoryid, count(distinct (userid)) sum from dw.dw_category_userid_analyze where categoryid in
+        <foreach collection="categoryIds" item="categoryId" open="(" separator="," close=")">
+            ${categoryId}
+        </foreach>
+        group by categoryid;
+    </select>
+
+    <!-- 分类型标签-->
+    <select id="countByTagids" resultType="com.jollychic.data.yuce.common.model.usercategory.dos.impala.ClassifiedTagNumDO" statementType="STATEMENT" >
+        select tagid, count(distinct userid) num  from dw.dw_category_userid_analyze where categoryid = ${categoryId} and tagid in
+        <foreach collection="tagidList" item="tagid" open="(" separator="," close=")">
+            '${tagid}'
+        </foreach>
+        group by tagid
+    </select>
+
+    <!-- 统计型标签 -->
+    <select id="countByTagweight" resultType="com.jollychic.data.yuce.common.model.usercategory.dos.impala.StatisticTagNumDO" statementType="STATEMENT" >
+         select floor(tagweight/${step}) tagvalue, count(distinct userid) num from dw.dw_category_userid_analyze
+         where  categoryid = ${categoryId} and tagid = '${tagid}' and tagweight>=${sectionStart} and tagweight &lt;= ${sectionEnd}
+         group by floor(tagweight/${step}) order by  floor(tagweight/${step})
+
+    </select>
+
+    <!-- 统计型标签，计算横轴步进 -->
+    <!--<select id="selectStepByCondition" resultType="java.lang.Integer" statementType="STATEMENT">
+        select ceil((max(tagweight)-min(tagweight))/10) from dw.dw_category_userid_analyze
+              where categoryid =  ${categoryId} and tagid = '${tagid}'
+    </select>-->
+
+    <!-- 统计型标签，计算标签平均值 -->
+    <select id="selectAvgByCondition" resultType="java.lang.Double" statementType="STATEMENT">
+        select avg(tagweight) from dw.dw_category_userid_analyze
+              where categoryid =  ${categoryId} and tagid = '${tagid}'
+    </select>
+
+    <!-- 统计型标签，计算标签方差 -->
+    <select id="selectVarianceByCondition" resultType="java.lang.Double" statementType="STATEMENT">
+        select pow(sum(pow((tagweight-${average}),2))/(count(*)-1),0.5) from  dw.dw_category_userid_analyze
+              where categoryid =  ${categoryId} and tagid = '${tagid}'
+    </select>
+
+
+    <!-- 删除分析数据 -->
+    <update id="deleteCategoryAnalyzeData" statementType="STATEMENT">
+        alter table  dw.dw_category_userid_analyze drop partition (categoryid in
+        <foreach collection="list" item="categoryId" open="(" separator="," close=")">
+            ${categoryId}
+        </foreach>
+        )
+    </update>
+
+
+
+</mapper>

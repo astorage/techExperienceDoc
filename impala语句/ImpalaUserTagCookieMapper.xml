@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jollychic.data.yuce.server.usercategory.mapper.impala.ImpalaUserTagCookieMapper">
+    <!-- 自定义返回结果集 -->
+    <resultMap id="UserTagCookieResultMap" type="UserTagCookieDO">
+        <result property="cookieId" column="cookieid" javaType="java.lang.String"/>
+        <result property="tagId" column="tag_id" javaType="java.lang.String"/>
+        <result property="tagValue" column="tag_value" javaType="java.lang.Double"/>
+    </resultMap>
+
+    <!--统计满足条件的cookieId的数量，去重-->
+    <select id="countByCondition" resultType="java.lang.Integer"  statementType="STATEMENT">
+        select count(distinct (utc.cookieid))  from dw.dw_profile_tag_user_cookie_service utc
+        <foreach collection="conditionList" item="condition" index="index" open="JOIN ( SELECT cookieid FROM dw.dw_profile_tag_user_cookie_service WHERE " close="" separator="JOIN ( SELECT cookieid FROM dw.dw_profile_tag_user_cookie_service WHERE">
+            ${condition} ) utc${index} ON utc.cookieid = utc${index}.cookieid
+        </foreach>
+        <where>
+            <if test="firstCondition != null">
+                ${firstCondition}
+            </if>
+            <if test="excludeCategory !=null" >
+                and NOT EXISTS (SELECT cookie_id FROM dw.dw_cookieid_category_relation WHERE data_date='${dataDate}' and  cookie_id = utc.cookieid AND category_id IN(${excludeCategory}))
+            </if>
+        </where>
+    </select>
+
+
+    <!--统计满足条件的cookieId的数量，人群减法不依赖人群的结果数据-->
+    <select id="countByConditionNew" resultType="java.lang.Integer"  statementType="STATEMENT">
+        select count(distinct (utc.cookieid))  from dw.dw_profile_tag_user_cookie_service utc
+        <if test="conditionList != null and conditionList.size() > 0">
+            <foreach collection="conditionList" item="condition" index="index" open="JOIN ( SELECT cookieid FROM dw.dw_profile_tag_user_cookie_service WHERE " close="" separator="JOIN ( SELECT cookieid FROM dw.dw_profile_tag_user_cookie_service WHERE">
+                ${condition} ) utc${index} ON utc.cookieid = utc${index}.cookieid
+            </foreach>
+        </if>
+
+        <where>
+            <if test="firstCondition != null">
+                ${firstCondition}
+            </if>
+            <if test="excludeContionList !=null and excludeContionList.size() > 0" >
+
+                <foreach collection="excludeContionList" item="item" open="and utc.cookieid not in ( select exclude.cookieid from (" separator="union" close=")exclude)">
+                    select distinct (ex.cookieid)  from dw.dw_profile_tag_user_cookie_service ex
+                    <if test="item.conditionList != null">
+                        <foreach collection="item.conditionList" item="condition" index="index" open="JOIN ( SELECT cookieid FROM dw.dw_profile_tag_user_cookie_service WHERE " close="" separator="JOIN ( SELECT cookieid FROM dw.dw_profile_tag_user_cookie_service WHERE">
+                            ${condition} ) ex${index} ON ex.cookieid = ex${index}.cookieid
+                        </foreach>
+                    </if>
+                    <where>
+                        <if test="item.firstCondition != null">
+                            ${item.firstCondition}
+                        </if>
+                    </where>
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
