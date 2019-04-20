@@ -1,0 +1,199 @@
+nohup spark-submit --master yarn --deploy-mode client --queue root.core.app --driver-memory 1g  --executor-memory 4g --executor-cores 3  --num-executors 10 --class com.jollychic.example.HiveDataToEs  /home/userprofile/yubo/eshivedata/target/spark-streaming-demo-2.1.1-1.0-SNAPSHOT-jar-with-dependencies.jar >>/home/userprofile/yubo/esdata.log 2>&1 &
+
+spark-submit --master yarn --deploy-mode client  --driver-memory 1g  --executor-memory 4g --executor-cores 3  --num-executors 10 --class com.jollychic.example.HiveDataToEs  /home/userprofile/yubo/eshivedata/target/spark-streaming-demo-2.1.1-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+nohup spark-submit --master yarn --deploy-mode client --queue root.core.app --driver-memory 1g  --executor-memory 4g --executor-cores 3  --num-executors 50 --class com.jollychic.example.EsData1  /home/userprofile/yubo/eshivedata/target/spark-streaming-demo-2.1.1-1.0-SNAPSHOT-jar-with-dependencies.jar >>/home/userprofile/yubo/esdata-test.log 2>&1 &
+
+
+nohup spark-submit --master yarn --deploy-mode client --queue root.core.app --driver-memory 1g  --executor-memory 4g --executor-cores 3  --num-executors 100 --class com.jollychic.example.HiveDataToEsCookieid  /home/userprofile/yubo/eshivedata/target/spark-streaming-demo-2.1.1-1.0-SNAPSHOT-jar-with-dependencies.jar >>/home/userprofile/yubo/esdata.log 2>&1 &
+
+
+yarn  application -kill application_1540214258888_545555
+
+hadoop fs -copyToLocal /tmp/logs/userprofile/logs/application_1540214258888_317309/wlj-datanode59_8041 .
+
+
+curl http://10.142.170.221:9200/20181106_userid/tags/_search -X POST 
+
+
+curl localhost:9999/api/daizhige/article -X POST -d "title=comewords&content=articleContent"
+
+
+
+curl -X POST "http://10.142.170.221:9200/20181106_userid/tags/_search" -H 'Content-Type: application/json' -d'
+{
+    "size" : 5,
+    "query" : {
+        "match_all" : {}
+    }
+    
+}
+'
+
+
+
+curl -X POST "http://10.142.170.221:9200/20181106_userid/tags/_search" -H 'Content-Type: application/json' -d'
+{
+    "size" : 5
+}
+'
+
+#查看所有的索引
+curl http://10.142.170.221:9200/_cat/indices
+
+curl  http://10.142.170.221:9200/20181106_userid/tags/_search?pretty
+
+
+curl http://10.142.170.221:9200/_cat/nodes
+
+curl http://10.142.170.232:9200/_cat/nodes
+
+curl http://10.121.26.250:9200/_cat/nodes
+
+curl http://10.121.26.250:9200/_cat/indices
+
+10.121.26.235:9200
+10.121.26.250:9200
+10.121.26.240:9200
+ 查看节点状态：
+ curl -XGET "http://10.121.26.235:9200/"
+ curl -XGET "http://10.121.26.250:9200/"
+ curl -XGET "http://10.121.26.240:9200/"
+ 
+ 查看集群健康状态
+ curl -XGET "http://10.121.26.235:9200/_cat/health?v"
+ curl -XGET "http://10.121.26.250:9200/_cat/health?v"
+ curl -XGET "http://10.121.26.250:9200/_cat/health?v"
+ 
+
+ 查看集群索引情况
+ curl -XGET "http://10.121.26.235:9200/_cat/indices?v"
+ curl -XGET "http://10.121.26.250:9200/_cat/indices"
+ curl -XGET "http://10.121.26.240:9200/_cat/indices"
+ 
+ 查看集群磁盘情况
+ curl -XGET "http://10.121.26.235:9200/_cat/allocation?v"
+ curl -XGET "http://10.121.26.250:9200/_cat/allocation?v"
+ curl -XGET "http://10.121.26.240:9200/_cat/allocation?v"
+ 
+ 
+ curl -XGET "http://10.121.26.235:9200/_cat/nodes?v"
+ 
+ curl -XGET "http://10.121.26.235:9200/_cat"
+
+
+
+curl -X PUT "http://10.142.170.221:9200/20181105_userid/tags/1003202" -H 'Content-Type: application/json' -d'
+{
+  "userid":"1003202",
+  "tags":	{"A121U013_0_006":"","B220U100_0_002":"16467511","A220U088_0_001":"","B220U100_0_001":"15691426","B120U037_0_002":"-99","B120U075_0_003":"","A121U032_0_004":"","A121U031_0_002":"","A220U091_0_001":"1300"}
+}'
+
+
+
+curl  http://10.142.170.221:9200/20181105_userid/tags/_search?pretty
+
+
+curl http://10.142.170.221:9200/_cat/indices?v
+
+curl http://10.142.170.221:9200/_cat/indices/20181106_userid?v
+
+
+curl  http://10.142.170.221:9200/spark-es/test/_search?pretty
+
+
+curl  http://10.142.170.232:9200/spark-es/test/_search?pretty
+
+curl http://10.121.26.250:9200/_cat/indices?v
+curl http://10.121.26.235:9200/_cat/indices?v
+
+curl -X PUT "http://10.121.26.235:9200/20181114_userid/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.mapping.total_fields.limit": 10000
+}'
+
+curl -X PUT "http://10.121.26.235:9200/20181114_cookieid/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.mapping.total_fields.limit": 10000
+}'
+
+
+
+org.elasticsearch.hadoop.rest.EsHadoopRemoteException: illegal_argument_exception: Limit of total fields [1000] in index [20181107_userid] has been exceeded
+
+curl -X PUT "http://10.142.170.221:9200/20181107_userid/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.mapping.total_fields.limit": 10000
+}'
+
+
+
+curl  http://10.142.170.221:9200/20181110_userid/tags/_search?pretty
+
+
+
+org.elasticsearch.hadoop.rest.EsHadoopNoNodesLeftException: Connection error (check network and/or proxy settings)- all nodes failed; tried [[10.142.170.232:9200, 10.142.170.221:9200]] 
+
+ org.apache.spark.util.TaskCompletionListenerException: Connection error (check network and/or proxy settings)- all nodes failed; tried [[10.142.170.232:9200, 10.142.170.221:9200]] 
+ 
+ 
+ curl -X POST "http://10.142.170.221:9200/20181110_userid/tags/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+    "size" : 5
+}
+'
+
+
+curl -X PUT http://10.142.170.221:9200/_cluster/settings -H 'Content-Type: application/json' -d'
+{ 
+   "transient" : {
+		"threadpool.bulk.queue_size" : 1000 
+		} 
+}
+'
+
+
+
+
+#查看thread pool的情况
+curl http://10.142.170.221:9200/_cat/thread_pool?pretty
+
+curl http://10.142.170.221:9200/_cat/thread_pool/?v&h=id,name,active,rejected,completed
+
+
+curl -X PUT "http://10.142.170.221:9200/20181112_userid/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.mapping.total_fields.limit": 10000
+}'
+
+curl -X PUT "http://10.142.170.221:9200/20181113_cookieid/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.mapping.total_fields.limit": 10000
+}'
+
+
+curl -XDELETE "http://10.121.26.235:9200/2018115_cookieid"
+
+
+curl -XPUT "http://10.121.26.235:9200/20181115_cookieid" -H 'Content-Type: application/json' -d'
+{
+   "settings": {
+     "index.mapping.total_fields.limit": 10000
+   }
+ }'
+
+ 
+ curl -XPUT "http://10.121.26.235:9200/20181115_userid" -H 'Content-Type: application/json' -d'
+{
+   "settings": {
+     "index.mapping.total_fields.limit": 10000
+   }
+ }'
+
+ curl -XDELETE "http://10.121.26.235:9200/2018115_userid"
+ 
+ 
+
+
+
+

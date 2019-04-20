@@ -1,0 +1,198 @@
+POST /user/test/_search
+{
+  "size": 10,
+  "query" : {
+    "bool":{
+      "must": [
+                {"range": {"A220H029_0_001": {"gte":500}} }      
+      ]
+    }
+   
+  },
+    "aggs" : {
+        "distinct_users_count" : {
+            "cardinality" : {
+              "field" : "cookieid.keyword"
+            }
+        }
+    }
+}
+
+#查看集群是否健康
+GET /_cat/health?v
+
+POST /user/test/_search
+{
+  "query": {
+  "script": {
+      "script": {
+        "inline": "doc['A121H030_0_002'].value >= 547",
+        "lang":"painless"
+      }
+  }
+  } 
+}
+
+POST /user/test/_search
+{
+  "query": {
+  "script": {
+      "script": {
+        "inline": "ctx._source.A121H030_0_002 >= 547",
+        "lang":"painless"
+      }
+  }
+  } 
+}
+
+GET /user
+
+GET /user/test/10
+
+#检查某个key是否存在
+HEAD /user/test/11
+
+GET /user/test/_search
+
+GET /user/test/_search?q=E220H089_0_001:720x1280
+
+GET /user/test/_search
+{
+  "query": {
+    "match": {
+      "E220H089_0_001": "720x1280"
+    }
+  }
+}
+
+
+GET /user/test/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "E220H089_0_001": "720x1280"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "A220H029_0_001": {
+            "gte": 215
+          }
+        }
+      }
+    }
+  }
+}
+#全文搜索
+GET /user/test/_search
+{
+  "query": {
+    "match": {
+      "E220H090_0_001": "SM- VNS"
+    }
+  }
+}
+
+
+#短语搜索
+GET /user/test/_search
+{
+  "query": {
+    "match_phrase": {
+      "E220H090_0_001": "SM-J100H"
+    }
+  }
+}
+
+#高亮结果
+GET /user/test/_search
+{
+  "query": {
+    "match": {
+      "E220H090_0_001": "SM- VNS"
+    }
+  },
+  "highlight": {
+    "fields": {
+      "E220H090_0_001":{}
+    }
+  }
+}
+
+#根据属性分组
+GET /user/test/_search
+{
+  "aggs": {
+    "e22_grouping": {
+      "terms": {
+        "field": "E220H090_0_001"
+      }
+    }
+  }
+}
+#terms最属性有做分析
+
+POST /user/_mapping/test
+{
+  "properties": {
+    "E220H090_0_001": { 
+      "type":     "text",
+      "fielddata": true
+    }
+  }
+}
+
+
+#根据属性分组，在分组内求某个属性的平均值
+GET /user/test/_search
+{
+  "aggs": {
+    "e22_grouping": {
+      "terms": {
+        "field": "E220H090_0_001"
+      },
+      "aggs": {
+        "avg_B220H039_0_001": {
+          "avg": {
+            "field": "B220H039_0_001"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+#查看集群的健康情况
+GET /_cluster/health
+
+
+
+PUT /website/blog/123
+{
+  "title": "My first blog entry",
+  "text": "Just trying this out...",
+  "date": "2014/01/01"
+}
+
+
+POST /website/blog/
+{
+  "title": "My second blog entry",
+  "text":  "Still trying this out...",
+  "date":  "2014/01/01"
+}
+
+
+GET /website/blog/123?pretty
+
+#获取部分字段_source=title,text  不能有空格
+GET /website/blog/123?_source=title,text
+
+#只获取_source
+GET /website/blog/123/_source
+

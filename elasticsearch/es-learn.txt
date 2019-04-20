@@ -1,0 +1,198 @@
+GET /user/test/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "E220H089_0_001": "720x1280"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "A220H029_0_001": {
+            "gte": 215
+          }
+        }
+      }
+    }
+  }
+}
+
+字符串可以当做数字比较大小
+
+
+es默认是不能根据text类型的属性进行terms，一般terms对数组类型的属性进行分组
+"type": "illegal_argument_exception",
+        "reason": "Fielddata is disabled on text fields by default. Set fielddata=true on [E220H090_0_001] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead."
+		
+需要对相应的字段进行 Set fielddata=true操作
+POST /user/_mapping/test
+{
+  "properties": {
+    "E220H090_0_001": { 
+      "type":     "text",
+      "fielddata": true
+    }
+  }
+}
+
+
+#根据属性分组
+GET /user/test/_search
+{
+  "aggs": {
+    "e22_grouping": {
+      "terms": {
+        "field": "E220H090_0_001"
+      }
+    }
+  }
+}
+#terms最属性有做分析
+
+这是聚合分组的结果
+"buckets": [
+        {
+          "key": "sm",
+          "doc_count": 3
+        },
+        {
+          "key": "a906w",
+          "doc_count": 2
+        },
+        {
+          "key": "gt",
+          "doc_count": 2
+        },
+        {
+          "key": "i9060i",
+          "doc_count": 2
+        },
+        {
+          "key": "2",
+          "doc_count": 1
+        },
+        {
+          "key": "g532f",
+          "doc_count": 1
+        },
+        {
+          "key": "huawei",
+          "doc_count": 1
+        },
+        {
+          "key": "iphone8",
+          "doc_count": 1
+        },
+        {
+          "key": "j100h",
+          "doc_count": 1
+        },
+        {
+          "key": "j500g",
+          "doc_count": 1
+        }
+      ]
+
+	  
+	  #根据属性分组，在分组内求某个属性的平均值
+GET /user/test/_search
+{
+  "aggs": {
+    "e22_grouping": {
+      "terms": {
+        "field": "E220H090_0_001"
+      },
+      "aggs": {
+        "avg_B220H039_0_001": {
+          "avg": {
+            "field": "B220H039_0_001"
+          }
+        }
+      }
+    }
+  }
+}
+
+#结果
+"aggregations": {
+    "e22_grouping": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 6,
+      "buckets": [
+        {
+          "key": "sm",
+          "doc_count": 3,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "a906w",
+          "doc_count": 2,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "gt",
+          "doc_count": 2,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "i9060i",
+          "doc_count": 2,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "2",
+          "doc_count": 1,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "g532f",
+          "doc_count": 1,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "huawei",
+          "doc_count": 1,
+          "avg_B220H039_0_001": {
+            "value": 417
+          }
+        },
+        {
+          "key": "iphone8",
+          "doc_count": 1,
+          "avg_B220H039_0_001": {
+            "value": 14
+          }
+        },
+        {
+          "key": "j100h",
+          "doc_count": 1,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        },
+        {
+          "key": "j500g",
+          "doc_count": 1,
+          "avg_B220H039_0_001": {
+            "value": null
+          }
+        }
+      ]
+    }
+  }
+

@@ -1,0 +1,10 @@
+Ô¤²âÇ°¶Ë¡ª¡ªreadmeÎÄ¼ş
+npm install
+
+npm run dev
+
+npm run build
+
+
+
+

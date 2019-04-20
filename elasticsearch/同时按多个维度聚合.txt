@@ -1,0 +1,87 @@
+同时按多个维度聚合
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "A121H030_0_002": {
+      "histogram": {
+        "field": "tags.A121H030_0_002",
+        "interval": 100
+      }
+    },
+    "24": {
+      "terms": {
+        "field": "tags.24.keyword"
+      }
+    }
+  }
+}
+
+结果：
+{
+  "took": 5,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "24": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A221H024_0_004",
+          "doc_count": 11
+        }
+      ]
+    },
+    "A121H030_0_002": {
+      "buckets": [
+        {
+          "key": 300,
+          "doc_count": 2
+        },
+        {
+          "key": 400,
+          "doc_count": 0
+        },
+        {
+          "key": 500,
+          "doc_count": 0
+        },
+        {
+          "key": 600,
+          "doc_count": 1
+        },
+        {
+          "key": 700,
+          "doc_count": 0
+        },
+        {
+          "key": 800,
+          "doc_count": 0
+        },
+        {
+          "key": 900,
+          "doc_count": 0
+        },
+        {
+          "key": 1000,
+          "doc_count": 0
+        },
+        {
+          "key": 1100,
+          "doc_count": 1
+        }
+      ]
+    }
+  }
+}

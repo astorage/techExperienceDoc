@@ -1,0 +1,166 @@
+curl -X GET "localhost:9200/_search" -H 'Content-Type: application/json' -d'
+{
+    "query": {
+        "match": {
+            "tweet": "elasticsearch"
+        }
+    }
+}
+'
+
+{
+  "size": 10,
+  "query" : {
+    "bool":{
+      "must": [
+        {"exists" : {"field": "A121H002_0_002"}},
+        {"term" : {"data_date": "20181006"}},
+        {"range": {"A220H029_0_001": {"gte":328}} }      
+      ]
+    }
+   
+  }
+}
+
+
+
+{
+    "size" : 0,
+    "aggs" : {
+        "distinct_colors" : {
+            "cardinality" : {
+              "field" : "color"
+            }
+        }
+    }
+}
+
+
+{
+  "size": 10,
+  "query" : {
+    "bool":{
+      "must": [
+                {"range": {"A220H029_0_001": {"gte":50}} }      
+      ]
+    }
+   
+  },
+    "aggs" : {
+        "distinct_users_count" : {
+            "cardinality" : {
+              "field" : "cookieid"
+            }
+        }
+    }
+}
+
+{
+  "size": 0,
+
+    "aggs" : {
+        "distinct_users_count" : {
+            "cardinality" : {
+              "field" : "cookieid.keyword"
+            }
+        }
+    }
+}
+
+
+{
+  "size": 0,
+
+    "aggs" : {
+        "distinct_users_count" : {
+            "cardinality" : {
+              "field" : "cookieid.keyword"
+            }
+        }
+    }
+}
+
+批量数据导入
+POST /my_store/products/_bulk
+{ "index": { "_id": 1 }}
+{ "price" : 10, "productID" : "XHDK-A-1293-#fJ3" }
+{ "index": { "_id": 2 }}
+{ "price" : 20, "productID" : "KDKE-B-9947-#kL5" }
+{ "index": { "_id": 3 }}
+{ "price" : 30, "productID" : "JODL-X-1937-#pV7" }
+{ "index": { "_id": 4 }}
+{ "price" : 30, "productID" : "QQPX-R-3956-#aD8" }
+
+curl 172.17.1.15:9200/_bulk?pretty --data-binary @E:\Bin\Debug\testdata\437714060.json
+
+{"index":{"_index":"meterdata","_type":"autoData"}}
+{"Mfid ":1,"TData":172170,"TMoney":209,"HTime":"2016-05-17T08:03:00"}
+
+
+计算人群
+===================================================================
+{
+  "size": 0,
+  "query" : {
+    "bool":{
+      "must": [
+                {"range": {"A220H029_0_001": {"gte":500}} }      
+      ]
+    }
+   
+  },
+    "aggs" : {
+        "distinct_users_count" : {
+            "cardinality" : {file:/D:/gitLocal/service_center/jolly-service/src/main/resources/cod/model_setting_2.0.json
+              "field" : "cookieid.keyword"
+            }
+        }
+    }file:/D:/gitLocal/service_center/jolly-service/src/main/resources/cod/model_setting_2.0.json
+}
+
+人群减法
+========================================================
+查询当前分群规则对应的cookieid或者userid，然后用not in 减去要减的多个人群的cookieid或者userid的并集（在impala中用的union）
+在elasticsearch中 用filter 用bool组合查询 must_not，这个要调研测试一下。
+
+人标签数据批量导入格式
+================================================================
+{"index":{ }}
+{ "cookieid" : "0003b0aa-4d7f-4cd2-beb4-b2134d9904f1", "A220H029_0_001":312,"A111H085_0_002":"","E220H091_0_001":"480x800","E220H089_0_001":"480x800","A221H024_0_004":"","E220H090_0_001":"SM-J100H","E220H088_0_001":"","A121H002_0_002":"","A121H030_0_001":"","A121H031_0_002":"", "data_date":"20181006" }
+{"index":{ }}
+{ "cookieid" : "00039360-BA21-4CFB-8C44-D2B89DAC26BD", "data_date" : "20181006", "A111H085_0_002":"0.6652587303678671","B220H034_0_001":"0.0","C120H004_7_001":"1","B220H034_0_002":"0.0","A221H024_0_001":"","C120H040_7_001":"6","A121H031_0_001":"","E220H094_0_001":"لا توجد مقاطعة","C120H022_7_001":"1","B121H031_0_002":"","A220H054_0_001":"3","B220H038_0_001":"67","B120H008_0_005":"","A121H002_0_002":"","C120H010_7_001":"2","A111H008_0_001":"","B121H030_0_005":"54","C120H001_7_001":"18","C120H007_7_011":"1","C120H001_7_002":"2","E220H091_0_001":"1242x2208","E220H089_0_001":"1242x2208","E220H088_0_002":"","C120H011_7_003":"1","B220H039_0_001":"14","2":null,"A220H029_0_001":"314","C120H011_7_006":"1","C120H043_7_004":"2","E220H090_0_001":"iPhone8","A121H030_0_002":"295","B220H015_0_001":"14.0","C120H007_6_003":"1","A111H001_0_002":"-2724.5","C120H001_7_013":"2","B220H026_0_001":"68","C120H007_7_003":"7","A220H053_0_001":"124.93","C120H009_7_005":"5","C120H002_7_015":"1","C120H004_7_010":"5","C120H008_7_008":"2","C120H003_7_001":"4","C120H009_6_005":"1","C120H003_7_003":"1","C120H004_7_013":"1","C120H001_7_028":"2","C120H003_7_005":"9","C120H004_7_014":"2","C120H001_7_027":"3","E220H093_0_001":"","C120H003_7_007":"1","C120H007_7_004":"1","C120H019_7_004":"1","C120H001_7_032":"1","A121H013_0_006":"","E220H092_0_001":"","B220H011_0_001":"10.0","C120H019_7_002":"1","C120H012_7_004":"1" }
+
+好切换索引的话，平滑过度用索引的别名
+========================================
+1、属性分析，规则标签组合，用到了union，将各做组合的数据统计出来，形成一个饼图
+在elasticsearch中，可以在java中将标签组合好，然后分别搜索，然后用cardinality取cookieid或者userid的个数
+elasticsearch中桶的概念应该也可以完成这个。不能用桶
+elasticsearch中桶的概念应该也可以完成这个。不能用桶
+
+2、人群在某一个标签上的分布，分类型标签各个标签上的cookie数或者userid数量，统计性标签去掉离心数据，后在各标签取值上的cookie数量
+不能用桶
+分类型标签有几个值就要查询多少次
+
+
+Fielddata is disabled on text fields by default. Set fielddata=true on [color] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead.
+解决办法：
+http://172.31.2.215:9200/cars/_mapping/transactions/
+{
+  "properties": {
+    "color": { 
+      "type":     "text",
+      "fielddata": true
+    }
+  }
+}
+
+
+
+
+建立索引的方式：/日期_cookieid/tags/cookieid
+                /日期_userid/tags/userid
+				
+				
+				每天更新数据  先索引新数据，确认没问题，再删除旧的索引
+				
+				

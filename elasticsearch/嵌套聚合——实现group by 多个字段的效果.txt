@@ -1,0 +1,90 @@
+嵌套聚合——实现group by 多个字段的效果
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "agg1": {
+      "terms": {
+        "field": "tags.1002.keyword"
+      },
+      "aggs": {
+        "agg2": {
+          "terms": {
+            "field": "tags.10031.keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+结果
+{
+  "took": 6,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "agg1": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A121H002_0_002",
+          "doc_count": 7,
+          "agg2": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "A121H031_0_002",
+                "doc_count": 6
+              },
+              {
+                "key": "A121H031_0_001",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": "A121H002_0_007",
+          "doc_count": 2,
+          "agg2": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "A121H031_0_002",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": "A121H002_0_009,A121H002_0_002",
+          "doc_count": 1,
+          "agg2": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "A121H031_0_002",
+                "doc_count": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
