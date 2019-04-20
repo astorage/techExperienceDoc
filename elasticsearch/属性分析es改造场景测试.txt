@@ -1,0 +1,427 @@
+分组统计
+
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "agg1": {
+      "terms": {
+        "field": "tags.1002.keyword"
+      },
+      "aggs": {
+        "agg2": {
+          "terms": {
+            "field": "tags.10031.keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+结果
+{
+  "took": 6,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "agg1": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A121H002_0_002",
+          "doc_count": 7,
+          "agg2": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "A121H031_0_002",
+                "doc_count": 6
+              },
+              {
+                "key": "A121H031_0_001",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": "A121H002_0_007",
+          "doc_count": 2,
+          "agg2": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "A121H031_0_002",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": "A121H002_0_009,A121H002_0_002",
+          "doc_count": 1,
+          "agg2": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "A121H031_0_002",
+                "doc_count": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+统计型标签——折线图
+GET /cookieid_20190106/tags/_search
+{
+   "size" : 0,
+   "aggs":{
+      "A121H030_0_002":{
+         "histogram":{ 
+            "field": "tags.A121H030_0_002",
+            "interval": 100
+         }
+      }
+   }
+}
+
+结果：
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "A121H030_0_002": {
+      "buckets": [
+        {
+          "key": 300,
+          "doc_count": 2
+        },
+        {
+          "key": 400,
+          "doc_count": 0
+        },
+        {
+          "key": 500,
+          "doc_count": 0
+        },
+        {
+          "key": 600,
+          "doc_count": 1
+        },
+        {
+          "key": 700,
+          "doc_count": 0
+        },
+        {
+          "key": 800,
+          "doc_count": 0
+        },
+        {
+          "key": 900,
+          "doc_count": 0
+        },
+        {
+          "key": 1000,
+          "doc_count": 0
+        },
+        {
+          "key": 1100,
+          "doc_count": 1
+        }
+      ]
+    }
+  }
+}
+
+
+人群在某几个标签上的投影分别分析
+
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "A121H030_0_002": {
+      "histogram": {
+        "field": "tags.A121H030_0_002",
+        "interval": 100
+      }
+    },
+    "24": {
+      "terms": {
+        "field": "tags.24.keyword"
+      }
+    }
+  }
+}
+
+结果：
+{
+  "took": 5,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "24": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A221H024_0_004",
+          "doc_count": 11
+        }
+      ]
+    },
+    "A121H030_0_002": {
+      "buckets": [
+        {
+          "key": 300,
+          "doc_count": 2
+        },
+        {
+          "key": 400,
+          "doc_count": 0
+        },
+        {
+          "key": 500,
+          "doc_count": 0
+        },
+        {
+          "key": 600,
+          "doc_count": 1
+        },
+        {
+          "key": 700,
+          "doc_count": 0
+        },
+        {
+          "key": 800,
+          "doc_count": 0
+        },
+        {
+          "key": 900,
+          "doc_count": 0
+        },
+        {
+          "key": 1000,
+          "doc_count": 0
+        },
+        {
+          "key": 1100,
+          "doc_count": 1
+        }
+      ]
+    }
+  }
+}
+
+
+某个数据字段统计扩展
+
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0, 
+  "aggs": {
+    "money_stats": {
+      "extended_stats": {
+        "field": "tags.A121H030_0_002"
+      }
+    }
+  }
+}
+
+结果：
+
+{
+  "took": 3,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "money_stats": {
+      "count": 4,
+      "min": 305,
+      "max": 1136,
+      "avg": 598.75,
+      "sum": 2395,
+      "sum_of_squares": 1891067,
+      "variance": 114265.1875,
+      "std_deviation": 338.03134100257626,
+      "std_deviation_bounds": {
+        "upper": 1274.8126820051525,
+        "lower": -77.31268200515251
+      }
+    }
+  }
+}
+
+数据结构修改后，计算人群也可以支持的  查询可以下面这样查询
+GET /cookieid_20190106/tags/_search
+{ "size": 20, 
+  "query": {
+    "bool": {
+      "should": [
+        {
+         "match": {
+           "tags.89": "A121H002_0_004,A120H089_0_004, A120H089_0_016"
+         }
+        }
+      ]
+    }
+  }
+}
+结果：
+{
+  "took": 5,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 4,
+    "max_score": 1.6285466,
+    "hits": [
+      {
+        "_index": "cookieid_20190106",
+        "_type": "tags",
+        "_id": "jE5bK2gBXTP3VHd5Foas",
+        "_score": 1.6285466,
+        "_source": {
+          "cookieid": "0001d116-4d53-4082-8ac8-c47bd31ec5d8",
+          "tags": {
+            "24": "A221H024_0_004",
+            "89": "A121H002_0_004,A120H089_0_004",
+            "5088": "E220H088_0_001",
+            "10030": "A121H030_0_001",
+            "10031": "A121H031_0_002",
+            "A220H029_0_001": 683,
+            "E220H089_0_001": "800x1217",
+            "E220H091_0_001": "en",
+            "B220H066_0_001": 664
+          }
+        }
+      },
+      {
+        "_index": "cookieid_20190106",
+        "_type": "tags",
+        "_id": "ik5bK2gBXTP3VHd5Foas",
+        "_score": 0.9808292,
+        "_source": {
+          "cookieid": "0001306a-d732-4836-bdd6-9d0733dca0c8",
+          "tags": {
+            "24": "A221H024_0_004",
+            "89": "A120H089_0_004",
+            "1002": "A121H002_0_009,A121H002_0_002",
+            "5088": "E220H088_0_001",
+            "10030": "A121H030_0_001",
+            "10031": "A121H031_0_002",
+            "10085": "A111H085_0_002",
+            "A220H029_0_001": 419,
+            "E220H091_0_001": "ar",
+            "E220H089_0_001": "540x960",
+            "B220H066_0_001": 417
+          }
+        }
+      },
+      {
+        "_index": "cookieid_20190106",
+        "_type": "tags",
+        "_id": "jk5bK2gBXTP3VHd5Foas",
+        "_score": 0.9808292,
+        "_source": {
+          "cookieid": "0002244d-bdda-4f30-8250-7373af8486cd",
+          "tags": {
+            "24": "A221H024_0_004",
+            "89": "A120H089_0_016",
+            "1002": "A121H002_0_002",
+            "5088": "E220H088_0_001",
+            "10031": "A121H031_0_002",
+            "10085": "A111H085_0_001",
+            "A220H029_0_001": 160,
+            "A121H030_0_002": 315,
+            "E220H089_0_001": "480x800",
+            "E220H091_0_001": "ar",
+            "B220H066_0_001": 159
+          }
+        }
+      },
+      {
+        "_index": "cookieid_20190106",
+        "_type": "tags",
+        "_id": "kE5bK2gBXTP3VHd5Foas",
+        "_score": 0.9808292,
+        "_source": {
+          "cookieid": "00027bb9-93bd-46a5-bb9e-426edffaf471",
+          "tags": {
+            "24": "A221H024_0_004",
+            "89": "A120H089_0_016",
+            "1002": "A121H002_0_002",
+            "5088": "E220H088_0_001",
+            "10030": "A121H030_0_001",
+            "10031": "A121H031_0_002",
+            "20090": "A120H090_0_001",
+            "E220H089_0_001": "480x800",
+            "E220H091_0_001": "ar",
+            "B220H066_0_001": 235,
+            "B220H034_0_001": 0,
+            "B220H034_0_002": 0,
+            "A220H029_0_001": 236
+          }
+        }
+      }
+    ]
+  }
+}
+
+

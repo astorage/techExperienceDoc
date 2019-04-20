@@ -1,0 +1,53 @@
+EsSpark.saveToEs(aDF.rdd, "production-devices-spark-shell/device", esConfig)
+
+
+
+org.elasticsearch.hadoop.EsHadoopIllegalArgumentException: [ScalaMapFieldExtractor for field [[userid]]] cannot extract value from entity [class java.lang.String]
+
+解决办法：
+
+
+case class Device(device_id: String)
+
+val esDF = audienceDF.map {
+  case Row(device_id: String) => Device(device_id)
+}
+EsSpark.saveToEs(esDF.rdd, "devices-spark-shell/device", esConfig)
+
+
+
+18/11/11 17:06:12 WARN scheduler.TaskSetManager: Lost task 0.1 in stage 1.0 (TID 254, wlj-datanode30, executor 50): org.elasticsearch.hadoop.EsHadoopException: Could not write all entries for bulk operation [1000/1000]. Error sample (first [5] error messages):
+	org.elasticsearch.hadoop.rest.EsHadoopRemoteException: es_rejected_execution_exception: rejected execution of org.elasticsearch.transport.TransportService$7@74dda836 on EsThreadPoolExecutor[name = stream12/write, queue capacity = 200, org.elasticsearch.common.util.concurrent.EsThreadPoolExecutor@dd8eb20[Running, pool size = 48, active threads = 48, queued tasks = 203, completed tasks = 642]]
+	{"index":{"_id":"10272161"}}
+{"userid":"10272161","tags":{"D220U007_0_001":"0.0","B220U072_0_001":"0.0","B220U100_0_002":"21256166","A220U053_0_001":"0.0","B120U008_0_002":"","A220U083_0_001":"0.0","B220U068_0_001":"0.0","A121U013_0_006":"","A220U091_0_001":"704","D220U004_0_001":"0.0","D220U005_0_001":"1","A220U054_0_001":"1","B220U100_0_003":"0","B120U037_0_002":"-99","B120U075_0_001":"","D121U002_0_008":"","A220U084_0_001":"704","B220U025_0_001":"705","B220U100_0_001":"23498846","B220U076_0_004":"1","A111U008_0_008":"","A121U032_0_004":"","D121U006_0_002":"","A121U031_0_001":"","B220U024_0_001":"22.99","B220U023_0_001":"22.99"}}
+
+	org.elasticsearch.hadoop.rest.EsHadoopRemoteException: es_rejected_execution_exception: rejected execution of org.elasticsearch.transport.TransportService$7@23b85539 on EsThreadPoolExecutor[name = stream13/write, queue capacity = 200, org.elasticsearch.common.util.concurrent.EsThreadPoolExecutor@1beb1891[Running, pool size = 48, active threads = 48, queued tasks = 208, completed tasks = 267]]
+	{"index":{"_id":"10631191"}}
+{"userid":"10631191","tags":{"B220U066_0_001":"175","D220U007_0_001":"0.16666666666666666","D220U010_0_001":"5","B220U072_0_001":"0.0","B121U031_0_002":"5","B220U100_0_002":"2169233","B120U008_0_006":"","A220U053_0_001":"125.1","B220U039_0_001":"550","A220U083_0_001":"625.52","D220U003_0_001":"1.0","B220U068_0_001":"1.0","A121U013_0_006":"","A220U091_0_001":"690","D220U004_0_001":"0.0","A221U024_0_004":"","D220U005_0_001":"6","A220U054_0_001":"5","B220U100_0_003":"0","B120U037_0_002":"-99","D121U006_0_001":"","B120U075_0_001":"","A220U084_0_001":"268","D121U002_0_003":"","B220U025_0_001":"690","A111U008_0_002":"","B220U100_0_001":"3002989","B220U076_0_004":"1","B121U029_0_003":"","A121U032_0_004":"","A220U029_0_001":"691","B220U032_0_001":"0.0","B121U029_0_001":"","B220U076_0_001":"2","A121U031_0_001":"","B220U024_0_001":"172.57","B220U023_0_001":"104.43"}}
+
+	org.elasticsearch.hadoop.rest.EsHadoopRemoteException: es_rejected_execution_exception: rejected execution of org.elasticsearch.transport.TransportService$7@ec93b12 on EsThreadPoolExecutor[name = stream13/write, queue capacity = 200, org.elasticsearch.common.util.concurrent.EsThreadPoolExecutor@1beb1891[Running, pool size = 48, active threads = 48, queued tasks = 207, completed tasks = 268]]
+	{"index":{"_id":"10999559"}}
+{"userid":"10999559","tags":{"B220U066_0_001":"676","A121U031_0_002":"","B220U100_0_002":"14118993","A121U013_0_006":"","A220U091_0_001":"677","A221U024_0_004":"","B220U100_0_003":"0","B120U037_0_002":"-99","B120U075_0_003":"","B220U100_0_001":"9131477","A121U032_0_004":"","A220U088_0_001":""}}
+
+	org.elasticsearch.hadoop.rest.EsHadoopRemoteException: es_rejected_execution_exception: rejected execution of org.elasticsearch.transport.TransportService$7@23b85539 on EsThreadPoolExecutor[name = stream13/write, queue capacity = 200, org.elasticsearch.common.util.concurrent.EsThreadPoolExecutor@1beb1891[Running, pool size = 48, active threads = 48, queued tasks = 208, completed tasks = 267]]
+	{"index":{"_id":"1135558"}}
+{"userid":"1135558","tags":{"A121U031_0_002":"","B220U100_0_002":"6885700","A121U013_0_006":"","A220U091_0_001":"1295","B220U100_0_003":"0","B120U037_0_002":"-99","B120U075_0_003":"","B220U100_0_001":"11730446","A121U032_0_004":"","A220U088_0_001":""}}
+
+	org.elasticsearch.hadoop.rest.EsHadoopRemoteException: es_rejected_execution_exception: rejected execution of org.elasticsearch.transport.TransportService$7@766611ea on EsThreadPoolExecutor[name = stream12/write, queue capacity = 200, org.elasticsearch.common.util.concurrent.EsThreadPoolExecutor@dd8eb20[Running, pool size = 48, active threads = 48, queued tasks = 203, completed tasks = 642]]
+	{"index":{"_id":"1171960"}}
+{"userid":"1171960","tags":{"D220U007_0_001":"0.0","B220U072_0_001":"0.0","D121U002_0_004":"","B220U100_0_002":"18424109","A220U053_0_001":"67.32","A220U083_0_001":"67.32","D220U003_0_001":"0.0","B220U068_0_001":"1.0","A121U013_0_006":"","A220U091_0_001":"1290","D220U004_0_001":"0.0","D220U005_0_001":"1","A220U054_0_001":"1","B220U100_0_003":"0","B120U037_0_002":"-99","A220U084_0_001":"1290","B220U025_0_001":"1291","B120U008_0_001":"","B120U075_0_003":"","B220U100_0_001":"16356712","A111U008_0_008":"","A121U032_0_004":"","D220U009_0_001":"","B220U032_0_001":"0.0","D121U006_0_002":"","A121U031_0_001":"","B220U024_0_001":"67.32","B220U023_0_001":"67.32"}}
+
+Bailing out...
+	at org.elasticsearch.hadoop.rest.bulk.BulkProcessor.flush(BulkProcessor.java:512)
+	at org.elasticsearch.hadoop.rest.bulk.BulkProcessor.add(BulkProcessor.java:121)
+	at org.elasticsearch.hadoop.rest.RestRepository.doWriteToIndex(RestRepository.java:192)
+	at org.elasticsearch.hadoop.rest.RestRepository.writeToIndex(RestRepository.java:172)
+	at org.elasticsearch.spark.rdd.EsRDDWriter.write(EsRDDWriter.scala:67)
+	at org.elasticsearch.spark.rdd.EsSpark$$anonfun$doSaveToEs$1.apply(EsSpark.scala:107)
+	at org.elasticsearch.spark.rdd.EsSpark$$anonfun$doSaveToEs$1.apply(EsSpark.scala:107)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:87)
+	at org.apache.spark.scheduler.Task.run(Task.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:322)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)

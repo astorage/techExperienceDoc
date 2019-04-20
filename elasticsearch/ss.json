@@ -1,0 +1,510 @@
+{
+  "size" : 0,
+  "aggs" : {
+      "months" : {
+        "date_histogram": {
+          "field": "sold",
+          "interval": "month"
+        },
+        "aggs": {
+          "distinct_colors" : {
+              "cardinality" : {
+                "field" : "color"
+              }
+          }
+        }
+      }
+  }
+}
+
+
+{
+    "query": {
+        "filtered": {
+            "query": {
+                "query_string": {
+                    "query": "drama"
+                }
+            },
+            "filter": {
+                "term": { "year": 1962 }
+            }
+        }
+    }
+}
+
+
+curl -X GET "localhost:9200/cars/transactions/_search" -H 'Content-Type: application/json' -d'
+{
+  "size" : 0,
+  "aggs" : {
+      "months" : {
+        "date_histogram": {
+          "field": "sold",
+          "interval": "month"
+        },
+        "aggs": {
+          "distinct_colors" : {
+              "cardinality" : {
+                "field" : "color"
+              }
+          }
+        }
+      }
+  }
+}
+'
+
+
+
+
+curl -X DELETE "localhost:9200/cars/"
+curl -X PUT "localhost:9200/cars/" -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "transactions": {
+      "properties": {
+        "color": {
+          "type": "string",
+          "fields": {
+            "hash": {
+              "type": "murmur3" 
+            }
+          }
+        }
+      }
+    }
+  }
+}
+'
+curl -X POST "localhost:9200/cars/transactions/_bulk" -H 'Content-Type: application/json' -d'
+{ "index": {}}
+{ "price" : 10000, "color" : "red", "make" : "honda", "sold" : "2014-10-28" }
+{ "index": {}}
+{ "price" : 20000, "color" : "red", "make" : "honda", "sold" : "2014-11-05" }
+{ "index": {}}
+{ "price" : 30000, "color" : "green", "make" : "ford", "sold" : "2014-05-18" }
+{ "index": {}}
+{ "price" : 15000, "color" : "blue", "make" : "toyota", "sold" : "2014-07-02" }
+{ "index": {}}
+{ "price" : 12000, "color" : "green", "make" : "toyota", "sold" : "2014-08-19" }
+{ "index": {}}
+{ "price" : 20000, "color" : "red", "make" : "honda", "sold" : "2014-11-05" }
+{ "index": {}}
+{ "price" : 80000, "color" : "red", "make" : "bmw", "sold" : "2014-01-01" }
+{ "index": {}}
+{ "price" : 25000, "color" : "blue", "make" : "ford", "sold" : "2014-02-12" }
+'
+
+curl -X GET "localhost:9200/cars/transactions/_search" -H 'Content-Type: application/json' -d'
+{
+    "size" : 0,
+    "aggs" : {
+        "distinct_colors" : {
+            "cardinality" : {
+              "field" : "color"
+            }
+        }
+    }
+}
+'
+
+
+Fielddata is disabled on text fields by default. Set fielddata=true on [cookieid] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead.
+
+PUT megacorp/_mapping/employee/
+{
+  "properties": {
+    "interests": { 
+      "type":     "text",
+      "fielddata": true
+    }
+  }
+}
+
+{
+    "size" : 0,
+    "aggs" : {
+        "distinct_user" : {
+            "cardinality" : {
+              "field" : "cookieid"
+            }
+        }
+    }
+}
+
+
+A121H030_0_001
+
+
+{
+    "size" : 0,
+  "query" : {
+        "constant_score": {
+            "filter": {
+                 "term" : {
+                            "A121H030_0_001" : ""
+                          }
+            }
+        }
+    },
+    "aggs" : {
+        "distinct_user" : {
+            "cardinality" : {
+              "field" : "cookieid"
+            }
+        }
+    }
+}
+
+====================================
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "exists" : { "field" : "A121H030_0_001" }
+            }
+        }
+    },
+   "aggs" : {
+        "distinct_user" : {
+            "cardinality" : {
+              "field" : "cookieid"
+            }
+        }
+    }
+}
+
+=============================================
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "exists" : { "field" : "A121H030_0_001" }
+            }
+        }
+    },
+   "aggs" : {
+        "distinct_user" : {
+            "cardinality" : {
+              "field" : "A121H030_0_001"
+            }
+        }
+    }
+}
+
+
+{
+    "aggs" : {
+        "grades_count" : { "value_count" : { "field" : "grade" } }
+    }
+}
+
+
+
+{
+    "aggs": {
+        "answers": {
+            "nested": {
+                "path": "questions"
+            },
+            "aggs": {
+                "questions": {
+                    "terms": {
+                        "field": "questions.question",
+                        "size": 100,
+                        "order": {
+                            "_count": "desc"
+                        }
+                    },
+                    "aggs": {
+                        "options": {
+                            "terms": {
+                                "field": "questions.option",
+                                "size": 100,
+                                "order": {
+                                    "_count": "desc"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "dates": {
+            "date_histogram": {
+                "field": "ended_at",
+                "interval": "day",
+                "min_doc_count": 0
+            },
+            "aggs": {
+                "user_count": {
+                    "cardinality": {
+                        "field": "answer_id"
+                    }
+                }
+            }
+        }
+    }
+}
+
+---------------------
+
+本文来自 Zach-vip 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/zxjiayou1314/article/details/53837719?utm_source=copy 
+
+
+curl -X GET "localhost:9200/cars/transactions/_search" -H 'Content-Type: application/json' -d'
+{
+    "size" : 0,
+    "query" : {
+        "constant_score": {
+            "filter": {
+                 "exists" : { "field" : "A121H030_0_001" }
+            }
+        }
+    },
+    "aggs" : {
+        "single_avg_price": {
+            "avg" : { "field" : "cookieid" }
+        }
+    }
+}
+'
+
+
+{
+    "size" : 0,
+    "query": {
+        "match": {
+            "A121H030_0_001": ""
+        }
+    },
+    "post_filter": {    
+        "term" : {
+            "color" : "green"
+        }
+    },
+    "aggs" : {
+        "all_colors": {
+            "terms" : { "field" : "color" }
+        }
+    }
+}
+
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "exists" : { "field" : "A121H030_0_001" }
+            }
+        }
+    },
+   "aggs" : {
+        "distinct_user" : {
+            "cardinality" : {
+              "field" : "cookieid"
+            }
+        }
+    }
+}
+
+
+{
+    "size" : 0,
+    "query": {
+        "match": {
+          "A121H030_0_001" : ""
+        }
+    }
+}
+
+{
+    "size" : 0,
+    "query": {
+        "match_all": {
+        }
+    }
+}
+
+{
+    "size" : 0,
+    "query": {
+        "match": {
+          "cookieid":"0001d116-4d53-4082-8ac8-c47bd31ec5d8"
+        }
+    }
+  
+}
+
+
+
+curl -X POST "localhost:9200/my_store/products/_bulk" -H 'Content-Type: application/json' -d'
+{ "index": { "_id": 1 }}
+{ "price" : 10, "productID" : "XHDK-A-1293-#fJ3" }
+{ "index": { "_id": 2 }}
+{ "price" : 20, "productID" : "KDKE-B-9947-#kL5" }
+{ "index": { "_id": 3 }}
+{ "price" : 30, "productID" : "JODL-X-1937-#pV7" }
+{ "index": { "_id": 4 }}
+{ "price" : 30, "productID" : "QQPX-R-3956-#aD8" }
+'
+
+curl -X DELETE "localhost:9200/my_store"
+curl -X PUT "localhost:9200/my_store" -H 'Content-Type: application/json' -d'
+{
+    "mappings" : {
+        "products" : {
+            "properties" : {
+                "productID" : {
+                    "type" : "string",
+                    "index" : "not_analyzed" 
+                }
+            }
+        }
+    }
+'
+
+
+{
+    "mappings" : {
+        "products" : {
+            "properties" : {
+                "productID" : {
+                    "type" : "string",
+                    "index" : "not_analyzed" 
+                }
+            }
+        }
+    }
+	}
+
+
+No handler for type [string] declared on field [productID]
+
+到了6.X就彻底移除string了
+{"type":"text","index":false}
+
+Cannot search on field [productID] since it is not indexed
+
+
+
+
+{
+    "query" : {
+        "constant_score" : {
+            "filter" : {
+                "match_phrase" : {
+                    "productID" : "XHDK-A-1293-#fJ3"
+                }
+            }
+        }
+    }
+}
+
+
+size为0表示不返回结果，只返回匹配数据
+
+{
+  "size":0,
+    "query" : {
+        "match_phrase" : {
+          "productID" : "XHDK-A-1293-#fJ3"
+        }
+    }
+}
+
+
+{
+"took": 2,
+"timed_out": false,
+"_shards":{
+"total": 5,
+"successful": 5,
+"skipped": 0,
+"failed": 0
+},
+"hits":{
+"total": 1,
+"max_score": 0,
+"hits":[]
+}
+}
+
+
+
+{
+  "query": {
+    "match": {
+      "A121H002_0_002": ""
+    }
+  },
+  "aggs": {
+    "all_users": {
+      "terms": {
+        "field": "cookieid"
+      }
+    }
+  }
+}
+
+
+不使用分词器，字段类型用keyword
+{
+    "mappings" : {
+        "products" : {
+            "properties" : {
+                "productID" : {
+                    "type" : "keyword",
+                    "index" : true 
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
+{
+    "mappings" : {
+        "products" : {
+            "properties" : {
+                "productID" : {
+                    "type" : "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                }
+            }
+        }
+    }
+
+}
+
+
+{
+  "settings": {
+    "index.analysis.analyzer.default.type": "ik_max_word"
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "tags": {
+          "type":     "text",
+          "analyzer": "whitespace"
+        }
+      }
+    }
+  }
+}
+
+{
+  "size":0
+}
+
+
+
+
+Cannot search on field [productID] since it is not indexed.
+

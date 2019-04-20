@@ -1,0 +1,159 @@
+es聚合text类型的字段时，不能直接聚合
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "ssdfdf": {
+      "terms": {
+        "field": "tags.89",
+        "size": 100
+      }
+    }
+  }
+}
+会报错
+"reason": "Fielddata is disabled on text fields by default. Set fielddata=true on [tags.1002] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead."
+
+有2种方法可以聚合text类型的字段
+1、用.keyword， 这个不能分词。例如：
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "ssdfdf": {
+      "terms": {
+        "field": "tags.1002.keyword",
+        "size": 100
+      }
+    }
+  }
+}
+返回结果：
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "ssdfdf": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A121H002_0_002",
+          "doc_count": 7
+        },
+        {
+          "key": "A121H002_0_007",
+          "doc_count": 2
+        },
+        {
+          "key": "A121H002_0_009,A121H002_0_002",
+          "doc_count": 1
+        }
+      ]
+    }
+  }
+}
+
+2、设置字段的fielddata属性为true， 有分词的效果。例如：
+
+PUT /cookieid_20190106/_mapping/tags
+{
+  "properties": {
+    "tags": {
+      "properties": {
+        "89":{
+          "type" : "text",
+           "fielddata": true
+        }
+      }
+    }
+  }
+}
+注：嵌套字段
+
+GET /cookieid_20190106/tags/_search
+{
+  "size": 0,
+  "aggs": {
+    "ssdfdf": {
+      "terms": {
+        "field": "tags.89",
+        "size": 100
+      }
+    }
+  }
+}
+
+返回结果：
+
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 11,
+    "max_score": 0,
+    "hits": []
+  },
+  "aggregations": {
+    "ssdfdf": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "a120h089_0_004",
+          "doc_count": 2
+        },
+        {
+          "key": "a120h089_0_009",
+          "doc_count": 2
+        },
+        {
+          "key": "a120h089_0_016",
+          "doc_count": 2
+        },
+        {
+          "key": "a120h089_0_002",
+          "doc_count": 1
+        },
+        {
+          "key": "a120h089_0_003",
+          "doc_count": 1
+        },
+        {
+          "key": "a120h089_0_010",
+          "doc_count": 1
+        },
+        {
+          "key": "a120h089_0_013",
+          "doc_count": 1
+        },
+        {
+          "key": "a120h089_0_014",
+          "doc_count": 1
+        },
+        {
+          "key": "a121h002_0_004",
+          "doc_count": 1
+        }
+      ]
+    }
+  }
+}
+
