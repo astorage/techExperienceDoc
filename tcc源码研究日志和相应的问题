@@ -1,0 +1,127 @@
+[sample-dubbo-order]2019-07-08 16:11:16,456 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal)
+[sample-dubbo-order]2019-07-08 16:11:16,459 ERROR [CompensableTransactionInterceptor] 方法角色：ROOT
+[sample-dubbo-order]2019-07-08 16:11:16,459 ERROR [CompensableTransactionInterceptor] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:16,602 ERROR [CompensableTransactionInterceptor] rootMethodProceed 开始：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal).makePayment
+[sample-dubbo-order]2019-07-08 16:11:16,605 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal)
+[sample-dubbo-order]2019-07-08 16:11:16,605 ERROR [ResourceCoordinatorInterceptor] 当前线程程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:16,605 ERROR [ResourceCoordinatorInterceptor] 事务阶段：TRYING
+[sample-dubbo-order]2019-07-08 16:11:16,607 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:b9f9f42c-a284-3e15-a6fa-a691a4240429
+[sample-dubbo-order]2019-07-08 16:11:16,607 ERROR [TransactionManager] class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.cancelMakePayment
+[sample-dubbo-order]2019-07-08 16:11:16,607 ERROR [TransactionManager] class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.confirmMakePayment
+[sample-dubbo-order]2019-07-08 16:11:16,626 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal)
+order try make payment called.time seq:2019-07-08 16:11:16
+[sample-dubbo-order]2019-07-08 16:11:16,637 ERROR [PaymentServiceImpl] 当前线程程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:16,637 ERROR [PaymentServiceImpl] 调用现金try服务开始。http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [CompensableTransactionInterceptor] 方法角色：NORMAL
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [CompensableTransactionInterceptor] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [ResourceCoordinatorInterceptor] 当前线程程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:16,638 ERROR [ResourceCoordinatorInterceptor] 事务阶段：TRYING
+[sample-dubbo-order]2019-07-08 16:11:16,640 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:b9f9f42c-a284-3e15-a6fa-a691a4240429
+[sample-dubbo-order]2019-07-08 16:11:16,640 ERROR [TransactionManager] class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.cancelMakePayment
+[sample-dubbo-order]2019-07-08 16:11:16,640 ERROR [TransactionManager] class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.confirmMakePayment
+[sample-dubbo-order]2019-07-08 16:11:16,640 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:acca2c38-741a-3f97-a46d-1c9f32a7bc0d
+[sample-dubbo-order]2019-07-08 16:11:16,641 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.record
+[sample-dubbo-order]2019-07-08 16:11:16,641 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.record
+[sample-dubbo-order]2019-07-08 16:11:16,645 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-capital]2019-07-08 16:11:16,665 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl.record(CapitalTradeOrderDto)
+[sample-dubbo-capital]2019-07-08 16:11:16,738 ERROR [CompensableTransactionInterceptor] 方法角色：PROVIDER
+[sample-dubbo-capital]2019-07-08 16:11:16,738 ERROR [CompensableTransactionInterceptor] 当前线程：DubboServerHandler-10.10.2.176:2881-thread-3
+[sample-dubbo-capital]2019-07-08 16:11:16,766 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：String org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl.record(CapitalTradeOrderDto)
+[sample-dubbo-capital]2019-07-08 16:11:16,766 ERROR [ResourceCoordinatorInterceptor] 当前线程程：DubboServerHandler-10.10.2.176:2881-thread-3
+[sample-dubbo-capital]2019-07-08 16:11:16,766 ERROR [ResourceCoordinatorInterceptor] 事务阶段：TRYING
+[sample-dubbo-capital]2019-07-08 16:11:16,768 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:9f0d9ced-cdb3-31dd-935d-5cd25f0fad39
+[sample-dubbo-capital]2019-07-08 16:11:16,768 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.cancelRecord
+[sample-dubbo-capital]2019-07-08 16:11:16,768 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.confirmRecord
+[sample-dubbo-capital]2019-07-08 16:11:16,773 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：String org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl.record(CapitalTradeOrderDto)
+capital try record called. time seq:2019-07-08 16:11:17
+[sample-dubbo-capital]2019-07-08 16:11:17,844 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:17,845 ERROR [PaymentServiceImpl] 调用现金try服务结束。http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:17,845 ERROR [PaymentServiceImpl] 调用红包服务开始：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [CompensableTransactionInterceptor] 方法角色：NORMAL
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [CompensableTransactionInterceptor] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [ResourceCoordinatorInterceptor] 当前线程程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [ResourceCoordinatorInterceptor] 事务阶段：TRYING
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:b9f9f42c-a284-3e15-a6fa-a691a4240429
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.cancelMakePayment
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.confirmMakePayment
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:acca2c38-741a-3f97-a46d-1c9f32a7bc0d
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.record
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.record
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:82931de3-0a12-3ef9-9a24-ad0a155ac5e9
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService.record
+[sample-dubbo-order]2019-07-08 16:11:17,846 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService.record
+[sample-dubbo-order]2019-07-08 16:11:17,851 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-redpacket]2019-07-08 16:11:17,869 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.sample.dubbo.redpacket.service.RedPacketTradeOrderServiceImpl.record(RedPacketTradeOrderDto)
+[sample-dubbo-redpacket]2019-07-08 16:11:17,956 ERROR [CompensableTransactionInterceptor] 方法角色：PROVIDER
+[sample-dubbo-redpacket]2019-07-08 16:11:17,956 ERROR [CompensableTransactionInterceptor] 当前线程：DubboServerHandler-10.10.2.176:2880-thread-3
+[sample-dubbo-redpacket]2019-07-08 16:11:17,983 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：String org.mengyun.tcctransaction.sample.dubbo.redpacket.service.RedPacketTradeOrderServiceImpl.record(RedPacketTradeOrderDto)
+[sample-dubbo-redpacket]2019-07-08 16:11:17,983 ERROR [ResourceCoordinatorInterceptor] 当前线程程：DubboServerHandler-10.10.2.176:2880-thread-3
+[sample-dubbo-redpacket]2019-07-08 16:11:17,983 ERROR [ResourceCoordinatorInterceptor] 事务阶段：TRYING
+[sample-dubbo-redpacket]2019-07-08 16:11:17,987 ERROR [TransactionManager] 86471041-37e0-392e-936e-f3a2a6e33218:ded99458-203b-31c5-87b8-0689cfe84cd4
+[sample-dubbo-redpacket]2019-07-08 16:11:17,987 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService.cancelRecord
+[sample-dubbo-redpacket]2019-07-08 16:11:17,987 ERROR [TransactionManager] interface org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService.confirmRecord
+[sample-dubbo-redpacket]2019-07-08 16:11:17,992 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：String org.mengyun.tcctransaction.sample.dubbo.redpacket.service.RedPacketTradeOrderServiceImpl.record(RedPacketTradeOrderDto)
+red packet try record called. time seq:2019-07-08 16:11:19
+[sample-dubbo-redpacket]2019-07-08 16:11:19,065 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.sample.dubbo.redpacket.service.RedPacketTradeOrderServiceImpl.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:19,066 ERROR [PaymentServiceImpl] 调用红包服务结束：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:19,066 ERROR [CompensableTransactionInterceptor] rootMethodProceed 结束：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal).makePayment
+
+消费端获取的服务端@Compensable注解中的属性confirmMethod和cancelMethod怎么都是try方法record？在哪里设置的？
+
+[sample-dubbo-order]2019-07-08 16:11:19,068 ERROR [Transaction] http-nio-8081-exec-7 事务id：86471041-37e0-392e-936e-f3a2a6e33218:b9f9f42c-a284-3e15-a6fa-a691a4240429
+[sample-dubbo-order]2019-07-08 16:11:19,069 ERROR [Terminator] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:19,069 ERROR [Terminator] 反射调用： class org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.confirmMakePayment参数：[Ljava.lang.Object;@74d957a7
+order confirm make payment called. time seq:2019-07-08 16:11:20
+[sample-dubbo-order]2019-07-08 16:11:20,077 ERROR [Transaction] http-nio-8081-exec-7 事务id：86471041-37e0-392e-936e-f3a2a6e33218:acca2c38-741a-3f97-a46d-1c9f32a7bc0d
+[sample-dubbo-order]2019-07-08 16:11:20,077 ERROR [Terminator] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:20,077 ERROR [Terminator] 反射调用： interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.record参数：[Ljava.lang.Object;@73bb755c
+[sample-dubbo-order]2019-07-08 16:11:20,077 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [CompensableTransactionInterceptor] 方法角色：NORMAL
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [CompensableTransactionInterceptor] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [ResourceCoordinatorInterceptor] 当前线程程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [ResourceCoordinatorInterceptor] 事务阶段：CONFIRMING
+[sample-dubbo-order]2019-07-08 16:11:20,102 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy2.record(CapitalTradeOrderDto)
+[sample-dubbo-capital]2019-07-08 16:11:20,104 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl.record(CapitalTradeOrderDto)
+[sample-dubbo-capital]2019-07-08 16:11:20,104 ERROR [CompensableTransactionInterceptor] 方法角色：PROVIDER
+[sample-dubbo-capital]2019-07-08 16:11:20,104 ERROR [CompensableTransactionInterceptor] 当前线程：DubboServerHandler-10.10.2.176:2881-thread-4
+[sample-dubbo-capital]2019-07-08 16:11:20,108 ERROR [Transaction] DubboServerHandler-10.10.2.176:2881-thread-4 事务id：86471041-37e0-392e-936e-f3a2a6e33218:9f0d9ced-cdb3-31dd-935d-5cd25f0fad39
+[sample-dubbo-capital]2019-07-08 16:11:20,250 ERROR [Terminator] 当前线程：DubboServerHandler-10.10.2.176:2881-thread-4
+[sample-dubbo-capital]2019-07-08 16:11:20,250 ERROR [Terminator] 反射调用： interface org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService.confirmRecord参数：[Ljava.lang.Object;@4ac308f1
+capital confirm record called. time seq:2019-07-08 16:11:21
+[sample-dubbo-capital]2019-07-08 16:11:21,288 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.sample.dubbo.capital.service.CapitalTradeOrderServiceImpl.record(CapitalTradeOrderDto)
+
+确认阶段，消费方通过参与者调用了record的try方法，在服务方RCI拦截没有起作用？这是什么操作？
+
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [Transaction] http-nio-8081-exec-7 事务id：86471041-37e0-392e-936e-f3a2a6e33218:82931de3-0a12-3ef9-9a24-ad0a155ac5e9
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [Terminator] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [Terminator] 反射调用： interface org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService.record参数：[Ljava.lang.Object;@61715b4f
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [CompensableTransactionInterceptor] 方法角色：NORMAL
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [CompensableTransactionInterceptor] 当前线程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:21,290 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:21,291 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:21,291 ERROR [ResourceCoordinatorInterceptor] 当前线程程：http-nio-8081-exec-7
+[sample-dubbo-order]2019-07-08 16:11:21,291 ERROR [ResourceCoordinatorInterceptor] 事务阶段：CONFIRMING
+[sample-dubbo-order]2019-07-08 16:11:21,291 ERROR [ResourceCoordinatorInterceptor] RCI当前拦截方法==结束：String org.mengyun.tcctransaction.dubbo.proxy.javassist.proxy3.record(RedPacketTradeOrderDto)
+[sample-dubbo-redpacket]2019-07-08 16:11:21,294 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法：String org.mengyun.tcctransaction.sample.dubbo.redpacket.service.RedPacketTradeOrderServiceImpl.record(RedPacketTradeOrderDto)
+[sample-dubbo-redpacket]2019-07-08 16:11:21,295 ERROR [CompensableTransactionInterceptor] 方法角色：PROVIDER
+[sample-dubbo-redpacket]2019-07-08 16:11:21,295 ERROR [CompensableTransactionInterceptor] 当前线程：DubboServerHandler-10.10.2.176:2880-thread-4
+[sample-dubbo-redpacket]2019-07-08 16:11:21,301 ERROR [Transaction] DubboServerHandler-10.10.2.176:2880-thread-4 事务id：86471041-37e0-392e-936e-f3a2a6e33218:ded99458-203b-31c5-87b8-0689cfe84cd4
+[sample-dubbo-redpacket]2019-07-08 16:11:21,321 ERROR [Terminator] 当前线程：DubboServerHandler-10.10.2.176:2880-thread-4
+[sample-dubbo-redpacket]2019-07-08 16:11:21,321 ERROR [Terminator] 反射调用： interface org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService.confirmRecord参数：[Ljava.lang.Object;@dfe3ad5
+red packet confirm record called. time seq:2019-07-08 16:11:22
+[sample-dubbo-redpacket]2019-07-08 16:11:22,358 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：String org.mengyun.tcctransaction.sample.dubbo.redpacket.service.RedPacketTradeOrderServiceImpl.record(RedPacketTradeOrderDto)
+[sample-dubbo-order]2019-07-08 16:11:22,378 ERROR [CompensableTransactionInterceptor] CTI当前拦截方法==结束：void org.mengyun.tcctransaction.sample.dubbo.order.service.PaymentServiceImpl.makePayment(String,Order,BigDecimal,BigDecimal)
+
+
+
+最后1个问题：
+1、服务之间怎么传递事务信息的？ TransactionContext
