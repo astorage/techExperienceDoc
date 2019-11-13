@@ -1,9 +1,9 @@
-嵌套聚合——实现group by 多个字段的效果
+﻿嵌套聚合——实现group by 多个字段的效果
 GET /cookieid_20190106/tags/_search
 {
   "size": 0,
   "aggs": {
-    "agg1": {
+    "gourpby": {
       "terms": {
         "field": "tags.1002.keyword"
       },

@@ -1,0 +1,245 @@
+mysql索引原理
+引擎
+
+redis数据类型，操作
+内存空间优化
+
+elastic操作
+
+索引原理
+
+elasticsearch
+
+
+
+Elasticsearch -> Indices   -> Types  -> Documents -> Fields
+/index/type/
+
+集群，拥有相同cluster.name.
+
+增加节点或者减少节点，自动平均分配数据
+
+主节点——索引的增删，节点的增删
+
+
+请求可以发送的任何节点，都能讲请求分发到数据所在节点，然后收集结果返回
+
+
+索引算法    hash（文档id）%分片数=文档所在分片号码
+
+
+集群健康 status：green、yellow、red
+GET /_Cluster/health
+
+
+
+分片内部原理
+
+使文本可被搜索
+
+
+倒排索引 ——不变性
+
+
+将全文解析成单个的次，在统计所有的文档时候包含这个词，包含1，不包含为0
+
+
+每个被索引的字段都有自己的倒排索引
+
+
+索引更新
+
+增加新的补充索引，而不是修改整个倒排索引。
+
+
+一个段，就是一个索引
+
+
+一个Lucene索引（一个分片）：所有段
+
+提交点：所有已知段的文件
+
+内存索引缓存：提交后形成一个段
+.del文件  被删除文档的信息
+
+
+近实时搜索：在索引内存缓存中是不能被搜索的，在文件系统缓存是可以被搜索的，这个过程只需要一秒
+
+段开始在文件系统缓存中个，需要fsync flush到磁盘
+
+
+es——文件系统缓存——磁盘
+
+  refresh   默认每秒自动刷新一次。  
+
+
+内存索引缓存，文件系统缓存
+
+
+POST /_refresh 刷新所有索引
+
+POST /blogs/_refresh 刷新某一个索引
+
+
+设置刷新频率
+
+PUT /my_logs
+{
+  "settings": {
+    "refresh_interval": "30s" 
+  }
+}
+
+
+PUT /my_logs/_settings
+{ "refresh_interval": -1 }
+
+大量索引的时候可以操作，完了，再改回来
+
+PUT /my_logs/_settings
+{ "refresh_interval": "1s" }
+
+
+
+持久化变更
+
+fsync  flush 
+
+一个es索引 包括多个lucene索引，一个lucene索引多个提交点，一个提交点包含多个段 
+
+
+translog 保证缓存中的修改不丢失。默认 translog 是每 5 秒被 fsync 刷新到硬盘， 或者在每次写请求执行(e.g. index, delete, update, bulk)
+这意味着在整个请求被 fsync 到主分片和复制分片的translog之前，你的客户端不会得到一个 200 OK 响应。
+
+在每次请求后都执行一个 fsync 会带来一些性能损失，实践表明这种损失相对较小
+
+数据准确要求不严格的情况，使用异步fsync比较好。
+
+
+es启动，提交点，translog（最后一次提交后，未被刷新到磁盘的数据）
+
+
+
+实时搜索
+
+通过文档ID查询、更新、删除一个文档，先从translog任何最近的变更，再到段操作。
+就是说通过文档ID操作，总是能获取到最新的文档。
+
+
+30分钟flush一次，translog太大的时候flush
+
+POST /blogs/_flush  flush索引blogs
+
+POST /_flush?wait_for_ongoing  所有flush在返回之前完成。
+
+
+
+PUT /my_index/_settings
+{
+    "index.translog.durability": "async",
+    "index.translog.sync_interval": "5s"
+}
+
+针对索引单独设置
+
+
+"index.translog.durability": "request"  translog同步
+
+
+段合并
+
+每秒产生一个segment，对产生很多段，搜索会变得很慢。
+
+解决巨多小段问题：段合并
+
+文件删除就是在段合并的时候操作的。
+
+段合并不会中断搜索
+
+消耗大量IO、cpu资源，会影响搜索。默认会有资源限制，所以影响不大。
+
+
+合并段可以加快搜索，节省资源。
+
+优化段索引
+POST /logstash-2014-10/_optimize?max_num_segments=1
+
+
+不更新的索引，可以优化。使用optimize api接口段合并没有资源限制，会影响搜素。所以可以迁移数据
+
+
+优化的时候可以先去掉副本分片，
+
+POST /logs_2014-09-30/_settings
+{ "number_of_replicas": 0 }
+
+POST /logs_2014-09-30/_optimize?max_num_segments=1
+
+POST /logs_2014-09-30/_settings
+{ "number_of_replicas": 1 }
+
+
+索引迁移
+
+热点索引，需要使用最好的硬件
+
+PUT /logs_2014-10-01
+{
+  "settings": {
+    "index.routing.allocation.include.box_type" : "strong"
+  }
+}
+
+搜索少的索引
+POST /logs_2014-09-30/_settings
+{
+  "index.routing.allocation.include.box_type" : "medium"
+}
+
+
+关闭旧索引
+
+不用的索引，关闭。这样只会占用磁盘，不会消耗其他资源。关闭之前记得刷新translog（flush一下索引）
+POST /logs_2014-01-*/_flush 
+POST /logs_2014-01-*/_close 
+POST /logs_2014-01-*/_open 
+
+
+
+归档旧索引
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

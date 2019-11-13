@@ -1,4 +1,4 @@
-GET /user/test/_search
+﻿GET /user/test/_search
 {
   "query": {
     "bool": {
@@ -25,7 +25,9 @@ GET /user/test/_search
 
 es默认是不能根据text类型的属性进行terms，一般terms对数组类型的属性进行分组
 "type": "illegal_argument_exception",
-        "reason": "Fielddata is disabled on text fields by default. Set fielddata=true on [E220H090_0_001] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead."
+        "reason": "Fielddata is disabled on text fields by default. 
+Set fielddata=true on [E220H090_0_001] in order to load fielddata in memory by uninverting the inverted index. 
+Note that this can however use significant memory. Alternatively use a keyword field instead."
 		
 需要对相应的字段进行 Set fielddata=true操作
 POST /user/_mapping/test
