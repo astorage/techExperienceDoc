@@ -1,0 +1,326 @@
+﻿6大设计原则
+
+单一职责原则
+开闭原则
+接口隔离原则
+依赖倒置原则
+里氏替换原则
+迪米特法则
+
+
+23设计模式
+
+5创建型
+单例模式
+原型模式
+工厂方法模式
+抽象工厂模式
+建造者模式
+
+7结构型
+适配器模式
+代理模式
+装饰模式
+享元模式
+外观模式
+桥接模式
+组合模式
+
+11行为型
+模板方法模式
+责任链模式
+策略模式
+命令模式
+状态模式
+观察者模式
+访问者模式
+解释器模式
+迭代器模式
+备忘录模式
+中介者模式
+
+
+线程状态
+
+新建状态 =》可运行状态 =》运行状态 =》 阻塞状态（IO，sleep，join）=》等待状态（wait）=》结束状态
+
+类加载
+
+加载 =》验证 =》准备 =》解析 =》初始化 =》使用 =》卸载
+
+类加载器
+
+自定义加载器 =》应用程序加载器 =》扩展类加载器 =》启动类加载器
+
+双亲委派
+
+JVM四类加载器
+1、启动类加载器：负责加载JAVA_HOME\lib目录和-Xbootclasspath参数指定目录的类库
+2、扩展类加载器：负责加载JAVA_HOME\lib\ext目录和系统变量java.ext.dirs指定类库
+3、应用程序加载器：负责加载程序classpath路径上的类库
+4、自定义加载器：加载指定的类
+
+
+
+垃圾回收
+
+判断对象是否可回收
+
+引用计数法  存在循环依赖，导致不能回收的问题
+
+根搜索算法
+
+可作为根的对象
+
+变量引用的对象
+静态变量引用对象
+常量引用的对象
+本地方法栈中引用的对象等等
+
+引用类型
+强引用
+弱引用
+软引用
+虚引用
+
+垃圾回收算法
+
+标记清除算法 CMS
+标记拷贝算法 新生代
+标记整理算法 老年代
+分代回收算法 G1
+
+垃圾收集器
+新生代
+Serial
+ParNew
+Parallel Scavenge  最短停顿时间
+
+老年代
+CMS 最大吞吐量
+Serial Old
+Parallel Old
+
+新老通吃
+G1 分代回收 
+
+
+内存模式
+
+（Eden：S1：S2）：Old = （8:1:1）1:2
+
+长期存活的对象能进入老年代
+大对象直接进入老年代
+空间分配担保——尽量避免，（策略的话可以多分配年轻代空间，少创建临时的大对象），会很快占满老年代。
+
+
+OSI七层网络模式
+应用层
+表示层
+会话层
+传输层
+网络层
+数据链路层
+物理层
+
+
+三次握手建立连接
+
+1、客户端向服务器发起连接请求，SYN（syn=j），进入SYN_SEND状态，等待服务器确认。
+2、服务器收到客户端的连接请求，向服务器发起确认ACK（ack=j+1），同时向服务器发起自己的SYN（syn=k），进入SYN_RECV状态
+3、客户端收到服务器的SYN包后，向服务器确认ACK（ack=k+1），此包发送完毕，客户端和服务器进入ESTABLISHED状态。
+
+四次挥手
+1、客户端向服务器发送断开连接请求FIN
+2、服务器先想客户端确认ACK
+3、服务器等所有的发送消息和接收消息完毕，向客户端发送FIN
+4、客户端收到服务器的FIN后发送ACK确认。
+   服务器收到客户端的ACK后进入CLOSE状态，客户端要等待2个MSL时间后进入CLOSE状态（原因是，客户端发送ACK服务器没有收到，会重发FIN）
+   
+
+
+zookeeper的应用场景
+配置中心——Apollo
+负载均衡——kafka消费者重新分配分片
+注册中心——dubbo
+分布式锁——多个客户端创建相同的节点，只有一个客户端能创建成功。
+协同任务——子节点的任务都完成了，父节点任务才能执行（加一个父节点监控，自己点数量够了才执行）
+等等
+
+
+
+
+springbean生命周期
+1、实例化
+2、设置属性
+3、各种aware设置对象，如果实现对应的接口的话。比如（BeanNameAware、BeanFactoryAware、ApplicationContextAware）
+4、BeanPostProcessor的postProcessBeforeInitialization()
+5、InitializingBean的afterPropertiesSet（）
+6、ini-method参数指定的自定义初始化方法
+7、BeanPostProcessor的postProcessAfterInitialization()
+8、DisposableBean的destroy()方法
+9、destroy-method参数指定的销毁方法
+
+
+JDBC查询七步骤
+1、加载JDBC驱动
+2、建立并获取数据库连接
+3、创建jdbc Statements对象
+4、设置sql语句的入参
+5、执行sql语句并获取查询结果
+6、结果转换
+7、释放相关资源，比如connection，statement，resultSet
+
+mybatis大致原理
+1、读取mybatis配置文件config.xml。形成文件流行时
+2、从主配置文件中读取文件各节点信息并存放到Configuration对象中。读取mappers节点的引用文件，并将信息放入Configuration中
+3、根据Configuration对象获取数据库连接，并设置事务的隔离级别，返回数据库操作接口sqlSession的实现对象defaultSqlSession，然后操作数据库。
+
+
+事务的传播特性7
+
+propagation
+
+required 有事务就用，没有事务的话新建事务
+supports 有事务就用，没有事务的话就算了
+mandatory 有事务就用，没有事务的话就报错
+requires_new 有没有事务都新建事务，外层事务挂起
+not_supported 有事务挂起，没有事务正好
+never 有事务报错
+nested 新建事务，作为外层事务的一部分，随外层事务commit和rollback
+
+
+
+事务隔离级别
+
+读未提交 脏读问题
+读已提交 允许修改，有不可重复读问题 不锁记录
+可重复读 允许增加，有幻读的问题 锁记录
+序列化 解决幻读问题，锁表
+
+
+mysql默认的隔离级别是，可重复读
+
+
+mysql引擎 show engines
+
+Innodb
+mer_myisam
+memory
+blackhole
+myisam
+csv
+archive
+performance_schema
+
+
+springmvc重要组件
+
+DespatcherServlet 前端控制器
+HandlerMapping
+HandlerAdapter
+Handler
+ViewResolver
+view
+
+springcloud组件
+zuul 路由过滤，ZuulFilter
+feign 声明式服务调用，非声明式，RestTemplate、HttpClient
+hystrix 熔断降级，FallBackProvider
+ribbon 远程服务调用库，负载均衡
+consul 注册中心 @EnableDiscoveryClient
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
