@@ -231,6 +231,26 @@ ribbon 远程服务调用库，负载均衡
 consul 注册中心 @EnableDiscoveryClient
 
 
+redis内存优化
+
+1、redisObject对象
+2、缩减键值对象
+3、共享对象池 ——证书0-9999
+4、字符串优化 SDS，预分配机制，少用append操作
+5、编码优化,ziplist,intset
+6、控制key的数量
+
+
+string	raw embstr int	  动态字符串编码优化内存分配的字符串编码整数编码
+hash	hashtable ziplist	散列表编码压缩列表编码
+list	linkedlist ziplist quicklist	双向链表编码压缩列表编码3.2版本新的列表编码
+set	    hashtable intset	散列表编码整数集合编码
+zset	skiplist ziplist	跳跃表编码压缩列表编码
+
+xxxx-max-ziplist-entries
+xxxx-max-ziplist-value
+
+
 
 
 
