@@ -172,7 +172,7 @@ JDBC查询七步骤
 7、释放相关资源，比如connection，statement，resultSet
 
 mybatis大致原理
-1、读取mybatis配置文件config.xml。形成文件流行时
+1、读取mybatis配置文件config.xml。形成文件流行
 2、从主配置文件中读取文件各节点信息并存放到Configuration对象中。读取mappers节点的引用文件，并将信息放入Configuration中
 3、根据Configuration对象获取数据库连接，并设置事务的隔离级别，返回数据库操作接口sqlSession的实现对象defaultSqlSession，然后操作数据库。
 
@@ -205,10 +205,10 @@ mysql默认的隔离级别是，可重复读
 mysql引擎 show engines
 
 Innodb
+myisam
 mer_myisam
 memory
 blackhole
-myisam
 csv
 archive
 performance_schema
@@ -235,7 +235,7 @@ redis内存优化
 
 1、redisObject对象
 2、缩减键值对象
-3、共享对象池 ——证书0-9999
+3、共享对象池 ——整数0-9999
 4、字符串优化 SDS，预分配机制，少用append操作
 5、编码优化,ziplist,intset
 6、控制key的数量
