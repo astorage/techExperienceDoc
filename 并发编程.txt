@@ -1,0 +1,108 @@
+Collections.synchronizedCollection(Collection)
+		   .synchronizedList(list)
+		   .synchronizedMap(map)
+		   .synchronizedSet(set)
+		   .synchronizedSortedMap(sortedMap)
+		   .synchronizedSortedSet(sortedSet)
+		   
+volatile——轻量级的Synchronized。在并发下保证变量的可见性：当一个线程修改了共享变量，另一个线程能立刻读到修改后的值。
+
+原理：
+
+volatile在编译后会多一个lock前缀指令
+1、将当前处理器缓存的数据写回到内存
+2、写回内存的操作会使其他cpu里的缓存数据无效
+
+volatile保证缓存一致性
+
+CPU1    CPU2    CPU3
+缓存1   缓存2   缓存3
+======================
+        内存
+
+1、cpu都会检查总线上的数据，判断自己缓存中的数据是否被修改，如果被修改，将自己缓存中的数据设置失效标志
+2、cpu都会先从缓存中读取数据，如果缓存中没有需要的数据，或者失效，然后通过总线从内存中读取，并写入缓存		
+		
+volatile只能保证可见性，不能保证原子性。当线程访问volatile变量时，强制从公共堆栈中读取，而不是从线程的私有堆栈中读取
+
+
+Synchronized
+java中的每个对象都是锁：
+1、同步方法——锁是实例对象
+2、同步静态方法——锁是当前类的class对象
+3、同步代码块——锁是Synchronized(obj)中的obj对象
+
+Synchronized不会被子类继承
+
+每个对象都需要自己的锁——monitor，在执行Synchronized代码前，需要获取锁来保证同步，执行非同步代码不需要获取锁。
+
+Synchronized的Monitor监视锁是可重入的。
+
+重入锁：一个线程获取了锁之后，不释放锁，可以再次获取到该锁。
+
+
+多个线程同时访问同一对象的Synchronized代码时
+1、只有一个线程可以执行同步代码，其他线程必须等待
+2、其他线程可以执行非同步代码
+3、其他线程也不能执行对象的其他同步代码
+
+
+公平锁
+机制：顺序获取锁，保证线程均衡的获取到锁。
+线程调度：fifo，顺序得到CPU时间，保证等待的线程均等的获取cpu执行。会造成线程切换的开销
+
+非公平锁
+线程调度算法：线程可连续的获得cpu时间片，减少线程切换的开销。会出现线程“饥饿”现象
+
+每个锁都有一个等待队列，分配锁的机制：公平锁FIFO，非公平锁
+
+
+读写锁——分为读锁、写锁
+ReadWriteLock
+ReentrantReadWriteLock
+ReentrantReadWriteLock.ReadLock
+ReentrantReadWriteLock.WriteLock
+ReentrantReadWriteLock.Sync
+ReentrantReadWriteLock.NonfairSync
+ReentrantReadWriteLock.FairSync
+
+
+ReentrantLock 可重入锁
+ReentrantLock.Sync
+ReentrantLock.NonfairSync
+ReentrantLock.FairSync
+
+
+
+减少线程切换 
+1、无锁并发——分段任务，线程各自负责自己的任务
+2、CAS——乐观锁，使用cpu的原子操作特性。java atomic包使用CAS更新数据，不需要加锁
+3、使用最少量线程——减少等待，减少切换
+4、协程——在单线程中实现多任务调度，并在单线程中维持多任务切换
+
+
+避免死锁的几种方法
+1、避免一个线程同时获取多个锁
+2、避免一个锁内同时占用多个资源
+3、使用定时锁
+4、对于数据库锁，加锁解锁必须在一个session上，否则会出现解锁失败的情况。
+
+
+CAS三个问题
+1、A-B-A问题：用版本号解决。AtomicStampedReference，利用这个类可以使用一个CAS操作自动的替换一个引用和一个标记（stamp）
+2、自旋时间引起的cpu开销
+3、只能保证一个共享变量的原子操作。多个变量可以用锁、Synchronized，
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -250,6 +250,18 @@ zset	skiplist ziplist	跳跃表编码压缩列表编码
 xxxx-max-ziplist-entries
 xxxx-max-ziplist-value
 
+CAS（compare-and-swap） 利用cpu的原子操作特性
+
+非阻塞
+  volatile 变量
+  竞态条件（同时写）  需要另外的措施保证同步
+  
+  1、读写分离
+  2、写入用锁同步
+  SingleWriterCounter
+
+
+
 
 
 
