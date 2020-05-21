@@ -1,0 +1,9 @@
+nginx多进程模型
+https://www.cnblogs.com/yum777/p/6244909.html
+
+worker进程数据一般和cpu核数相同
+
+accept_mutex  保证一个请求只有一个worker进程处理
+
+
+
