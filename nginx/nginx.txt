@@ -1,0 +1,12 @@
+https://www.cnblogs.com/superlinux/p/12789134.html
+
+
+
+https://www.cnblogs.com/hanmk/p/9290533.html
+
+
+server_name 有值，且有几个端口号相同的server。
+nginx会用请求域名来匹配这个server_name，
+如果匹配到，用对应的server来解析
+如果没有匹配到，使用默认的server。
+不同域名，可以匹配到不同的server。
