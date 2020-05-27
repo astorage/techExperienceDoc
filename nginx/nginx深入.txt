@@ -6,4 +6,14 @@ worker进程数据一般和cpu核数相同
 accept_mutex  保证一个请求只有一个worker进程处理
 
 
+master进程管理worker进程
+
+	接收外界的信号
+	向各worker进程发送信号
+	监控worker进程的运行状态
+	当worker进程退出后（异常情况下），会重新启动新的worker进程
+
+
+
+
 
