@@ -1,0 +1,22 @@
+分布式系统cap
+
+consistency
+
+availability
+
+partition tolerance
+
+
+CAP原则的精髓就是要么AP，要么CP，要么AC，但是不存在CAP CAP不可同时满足
+
+BASE
+Basically Available（基本可用）
+Soft state（软状态）
+Eventually consistent（最终一致性）
+
+
+强事务ACID
+automic
+consistency
+isolation
+duration
