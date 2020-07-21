@@ -1,0 +1,291 @@
+单点登录
+
+轻型目录访问协议（LDAP）
+
+
+密码登录的问题
+
+1、密码登录本身不安全
+2、密码授权给第三方，没发控制权限范围和时间。给第三方，泄漏密码的风险增高
+3、修改密码回收权限的方式，存在弊端。
+
+
+
+
+oauth2
+
+
+
+
+（1） Third-party application：第三方应用程序，本文中又称"客户端"（client），即上一节例子中的"云冲印"。
+
+（2）HTTP service：HTTP服务提供商，本文中简称"服务提供商"，即上一节例子中的Google。
+
+（3）Resource Owner：资源所有者，本文中又称"用户"（user）。
+
+（4）User Agent：用户代理，本文中就是指浏览器。
+
+（5）Authorization server：认证服务器，即服务提供商专门用来处理认证的服务器。
+
+（6）Resource server：资源服务器，即服务提供商存放用户生成的资源的服务器。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。
+
+
+auth认证，一般用于第三方登录
+分两个关键步骤  认证，授权
+1、客户端携带标志（客户端在第三方申请的标志）去第三方获取授权code（用户授权：用户有授权操作）
+2、服务端根据code+标志+秘钥。去第三方获取token。并将token返回给前端客户端。
+code具有有效期，有权限范围，只能使用一次的特性。
+
+
+这样有相互关联的两重认证。
+
+
+自己的客户端，自己的后台应用。不需要这种认证方式。 需要这种认证，是因为客户端是第三方的，不可靠的。比如说微信登录，他不相信第三方app客户端，所以需要这操作。
+
+
+ authentication  鉴权、认证身份
+ authorization 授权
+
+
+单项加密破解
+1、暴力破解
+2、字典发
+3、哈希链（有长度）——彩虹表前身
+   确定hash链——进行R函数、或者进行0到多次H函数+R函数，判断结果是否在hash链结束集合中
+   确定hash链之后，从hash链头进行计算，如果hash值与给定hash值相等，找到明文
+   
+   R函数——重复hash链问题——解密明文的数量远小于2k
+4、rainbow tables——每一步使用不同的R函数（R1,R2,R3……Rk）。他解决了重复链的问题，
+
+
+加密算法，就是要慢，就是需要消耗机器资源。这样才能防止破解。一般调整到验证密码需要消耗1 second
+
+
+Bcrypt是单向Hash加密算法
+PBKDF2，PBKDF2简单而言就是将salted hash进行多次重复计算，这个次数是可选择的
+
+Argon2 是一种慢哈希函数。 有三个变种：Argon2i, Argon2d, and Argon2id 
+
+用户密码的特点，同一个用户在不同的系统中可能使用相同的密码，不同的用户在同一个系统中使用相同的密码。hash后存储，熵很低，容易破解
+
+Dictionary Attack  一个字典文件，储存了单词、短语、常用密码和他们 hash 后结果。将密码与 hash 结果对比，就能破解
+
+加 salt 可解决大部分问题
+
+Brute Force Attack 尝试每一个给定长度下的字符组合，效率很低 。借助 GPU、FPGA、ASIC 等定制硬件可以非常低成本的进行 Hash 计算。此外，如果 salt 和 password 被一起被拖库（甚至代码），会使得破解成本更加低。
+
+Hash 方法使用的是无内存计算的，而 GPU、ASIC 等硬件可以让无内存计算变得非常高效。但是，当一个 Hash 方法需要用到一大块内存去计算的时候，这些硬件就会束手无策。所以 memory-hard hash function 开始被设计和使用。
+
+
+PBKDF2、bcrypt 和 scrpyt。
+这几个算法里只有 scrypt 是以高内存为目标的。但是可以通过 time-space tradeoff 将内存消耗转迁到计算资源消耗上。（scrypt 起初的设计是为了节省 CPU 计算资源，用内存换了计算时间）
+
+设计一个 memory-hard hash function是很难的问题。
+
+
+Hash 算法（H）的目标是令 A*T 最大化
+
+
+
+
+
+tradeoff攻击
+侧信道攻击
+折衷攻击
+GPU破解攻击
+
+XSS attack 跨站点脚本攻击 
+CSRF Attack  跨站点伪装攻击
+Clickjacking 
+
+
+Brute Force Attack 尝试每一个给定长度下的字符组合，效率很低 
+
+
+xss只能篡改http协议的响应，不能篡改https协议的响应
+
+
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+
+X-Content-Type-Options: nosniff
+
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains ; preload
+
+X-Frame-Options: DENY    禁止page放在iframe里面
+
+X-XSS-Protection: 1; mode=block
+
+
+HTTP Public Key Pinning (HPKP)   比较复杂
+
+
+=============spring security learn ==================
+
+spring security 通过标准的 servlet filter 和 servlet container 集成。spring security 可以工作在任何运行在servlet container中的应用。进一步说明，不需要在基于servlet container的应用中使用spring来应用spring security
+
+
+spring security 启动加载的filter
+
+2020-07-01 10:11:31.843  INFO 21224 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : 
+Creating filter chain: any request, 
+[
+org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@73d69c0f, 
+org.springframework.security.web.context.SecurityContextPersistenceFilter@6ea94d6a, 
+org.springframework.security.web.header.HeaderWriterFilter@49b07ee3, 
+org.springframework.security.web.csrf.CsrfFilter@a8a8b75, 
+org.springframework.security.web.authentication.logout.LogoutFilter@667e34b1, 
+org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@28952dea, 
+org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@54acff7d, 
+org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@34237b90, 
+org.springframework.security.web.authentication.www.BasicAuthenticationFilter@400d912a, 
+org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d7e7435, 
+org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@77bb0ab5, 
+org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1d01dfa5, 
+org.springframework.security.web.session.SessionManagementFilter@65f00478, 
+org.springframework.security.web.access.ExceptionTranslationFilter@40620d8e, 
+org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6b7d1df8
+]
+
+在springMVC程序中，servlet是DispatcherServlet的一个实例。最多只有一个servlet去处理单个HttpServletRequest 和 HttpServletResponse。
+大于等于1个Filter会用到来实现2个功能：
+1、阻止下游Filters和Servlet被调用。在这个例子中Filter典型的写HTTPServletResponse
+2、修改下游Filters和Servlet使用的HttpServletRequest和 HttpServletResponse
+
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+    // do something before the rest of the application
+    chain.doFilter(request, response); // invoke the rest of the application
+    // do something after the rest of the application
+}
+
+FilterChain中的Filters的顺序很重要
+
+spring提供了一个Filter的一个实现DelegatingFilterProxy，它用于连接Servlet Container的生命周期和Spring的ApplicationContext
+
+Servlet container 允许注册Filter用它自己的标准，不支持Spring定义的beans。DelegatingFilterProxy可以通过标准的Servlet container机制来注册
+代理 实现了Filter的spring bean的功能
+
+
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+    // Lazily get Filter that was registered as a Spring Bean
+    // For the example in DelegatingFilterProxy delegate is an instance of Bean Filter0
+    Filter delegate = getFilterBean(someBeanName);
+    // delegate work to the Spring Bean
+    delegate.doFilter(request, response);
+}
+
+
+
+FilterChainProxy 是一个特殊的Filter，由spring security提供，可以代理很多Filter实例。FilterChainProxy是一个bean，wrapped in DelegatingFilterProxy
+
+
+FilterChainProxy 中有很多 filterChains。每一个httpServletrequest都会找到一个匹配的filterChain
+
+
+SecurityFilterChain中的 Security Filters 是通过FilterChainProxy 注册的，而不是 DelegatingFilterProxy。有很多好处：
+1、FilterChainProxy给spring security 所有的 Servlet 支持提供了一个开始点。这样，如果你想定位spring security 的 Servlet support的问题，在FilterChainProxy 添加一个debug point 是一个很好的开始。
+2、FilterChainProxy是spring security用法的中心，它可以执行隐藏任务。比如，清理SecurityContext 来避免内存溢出。也可以应用HttpFirewall来保护应用遭受某些攻击。
+3、FilterChainProxy提供了更灵活的方式来决定什么时候执行SecurityFilterChain。在Servlet容器中，Filters被调用只基于URL。FilterChainProxy可以利用RequestMatcher 接口来决定被调用基于HttpServletRequest中的任何东西。
+
+事实上，FilterChainProxy可以决定哪一个SecurityFilterChain 会被用到，
+
+
+
+
+race conditions 竞态条件
+
+
+SecurityContextHolder  SecurityContext Authentication Principal Credentials Authorities
+
+
+SecurityContext 存储方式没配置
+	public static final String MODE_THREADLOCAL = "MODE_THREADLOCAL";
+	public static final String MODE_INHERITABLETHREADLOCAL = "MODE_INHERITABLETHREADLOCAL";
+	public static final String MODE_GLOBAL = "MODE_GLOBAL";
+	
+	spring.security.strategy=MODE_GLOBAL
+	
+	
+Authentication.getAuthorities()  返回的是当前用户拥有的权限。通常以角色的形式提现  ROLE_ADMINISTRATOR or ROLE_HR_SUPERVISOR
+
+
+AbstractAuthenticationProcessingFilter 
+
+ AuthenticationEntryPoint
+ 
+ 
+ 
+ Form Login
+ 
+ 
+ Basic Authentication
+ 
+ 
+ 
+ ISV 软件独立开发商
+ 
+ principle 当事人
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
