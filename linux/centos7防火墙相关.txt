@@ -1,0 +1,3 @@
+firewall-cmd --zone=public --list-ports  查看所有端口
+
+firewall-cmd --list-all 查看防火墙规则
