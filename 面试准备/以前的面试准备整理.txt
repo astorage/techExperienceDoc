@@ -1,4 +1,4 @@
-事情描述的关键
+﻿事情描述的关键
 STAR(situation, task, action, results)
 
 消息中间件：kafka，rabbitMQ，RocketMQ
@@ -320,7 +320,7 @@ volatile  保证变量可见性。当一个线程修改了共享变量，另一�
 cpu缓存  数据总线   内存
 
 cpu1      cpu2        cpu3         cpu4
-cache1    cache2	  cache3       cache4
+cache1    cache2      cache3       cache4
 
 --------------------------------------------  总线
 
@@ -330,7 +330,7 @@ cache1    cache2	  cache3       cache4
 
 
 1、可见性
-2、禁止指令重排
+2、禁止指令重排——有序性
 
 
 
@@ -341,6 +341,36 @@ https://www.cnblogs.com/dolphin0520/p/3920373.html
 
 happens-before
 
+
+
+OSI七层模型
+
+应用层		
+
+表示层
+
+会话层
+
+传输层
+
+网络层
+
+数据链路层
+
+物理层
+
+
+OSI五层模型
+
+应用层	
+
+传输层
+
+网络层
+
+数据链路层
+
+物理层
 
 
 
