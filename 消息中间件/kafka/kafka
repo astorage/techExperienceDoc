@@ -66,8 +66,8 @@ btree的性能很好 是O(logn), 一般被认为是常数。
 
 
 
-队列持久结构可以建立在线性度和追加文件写的情况上，类似日志的情况。这种结构的有点是所有操作系统的时间复杂度是O(1)，而且读写不会相互阻塞。
-这具有明显的性能优势，因为性能和数据大小完全decoupled。一个服务器利用大量的便宜、低转速 大容量的磁盘驱动。
+队列持久结构可以建立在线性度和追加文件写的情况上，类似日志的情况。这种结构的优点是所有操作系统的时间复杂度是O(1)，而且读写不会相互阻塞。
+这具有明显的性能优势，因为性能和数据大小完全decoupled。一个服务器利用大量的便宜、低转速、大容量的磁盘驱动。
 尽管他们具有很差的寻址性能，这些驱动具有可接受的性能在大量读写的情况下，成本低，容量更大。
 
 
@@ -83,7 +83,7 @@ This is particularly important when trying to run a centralized service that sup
 
 小的io问题发生在客户端和服务端，服务端持久化操作
 
-为了避免上面的2个问题，我们的协议围绕着“message set”抽象概念建立起来的，自然的将消息分组到一起。这允许网络请求将消息分组到一起，来摊销网络来回overhead。服务端一次的将大块的消息追加的日志文件，
+为了避免上面的2个问题，我们的协议围绕着“message set”抽象概念建立起来的，自然的将消息分组到一起。这允许网络请求将消息分组到一起，来摊销网络来回overhead（开支）。服务端一次的将大块的消息追加的日志文件，
 并且消费者每次获取大量的线性的消息块
 
 
@@ -123,7 +123,7 @@ sendfile和zero-copy 是java中的技术。
 
 高效的压缩方法要求压缩多个消息在一起， 而不是每个消息单独压缩。
 
-kafka支持这种高效的压缩方式，通过递归消息sets。一批消息会被成群的组织在一起，并用这种形式发送到server。这批数据将以压缩的形式写入，在log中也保持压缩形式，在consumer端才会被解压。
+kafka支持这种高效的压缩方式，通过遍历消息sets。一批消息会被成群的组织在一起，并用这种形式发送到server。这批数据将以压缩的形式写入，在log中也保持压缩形式，在consumer端才会被解压。
 
 
 kafka支持gzip和snappy的压缩协议。
@@ -151,11 +151,11 @@ producer将数据直接发送到是leader的partition所在的broker，不需要
 
 消费者
 
-kafka消费者以 发出fetching的请求到想要消费的领导partitions的brokers  的方式工作。consumer每次请求中指定他在log中的offset，然后获取到从offset开始的一块log（消息）。consumer因此控制消费的位置，也可以倒回去重新消费。
+kafka消费者以 发出fetching的请求到想要消费的leader partitions的brokers  的方式工作。consumer每次请求中指定他在log中的offset，然后获取到从offset开始的一块log（消息）。consumer因此控制消费的位置，也可以倒回去重新消费。
 
 pull还是push
 
-我们最初考虑的问题是 consumer从brokers拉取数据还是brokers向consumer推送数据。在这方吗kafka遵循了更传统的设计，大部分消息系统都是这样的，producer将消息push到broker，然后consumer 从broker pull。一些日志中心系统，
+我们最初考虑的问题是 consumer从brokers拉取数据还是brokers向consumer推送数据。在这方面kafka遵循了更传统的设计，大部分消息系统都是这样的，producer将消息push到broker，然后consumer 从broker pull。一些日志中心系统，
 例如Scribe和Apache Flume 使用了不一样的基于push的方式，数据是被push到下游的。两种方法各有好处，基于push的系统很难处理不同的consumer，因为broker控制传输速率。总体目标是consumer能尽可能大的速率消费；
 不幸的是，在基于push的系统中，这意味着consumer 趋向于被压制，他的消费速度低于产生消息的速率。在基于pull的系统中具有更好的属性
 
