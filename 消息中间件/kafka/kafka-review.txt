@@ -137,9 +137,9 @@ Exactly once——这正是人们想要的, 每一条消息只被传递一次.
  
  可以指定生产者需要的持久化级别
  
-  producer 指定了它想要等待消息被提交，则可以使用10ms的量级。
-  producer 也可以指定它想要完全异步地执行发送
-  producer它只想等待直到 leader 节点拥有该消息（follower 节点有没有无所谓）。
+  producer 指定了它想要等待消息被提交，则可以使用10ms的量级。acks=all 或者 -1
+  producer 也可以指定它想要完全异步地执行发送  acks=0
+  producer它只想等待直到 leader 节点拥有该消息（follower 节点有没有无所谓）。acks=1
   
   
  consumer角度
