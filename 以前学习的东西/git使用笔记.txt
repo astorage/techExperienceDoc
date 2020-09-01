@@ -1,0 +1,6 @@
+git 使用ssh-gen的时候，本地不需要有用户名和邮箱，但是在commit的时候必须要邮箱
+可以使用git config --global user.name ""
+	git config --global user.email ""
+
+git 使用ssh协议的时候，生成了ssh-key，每次操作的时候就不需要密码，很方便。
+
