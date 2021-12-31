@@ -377,12 +377,14 @@ OSI五层模型
 
 
 
+StringBuilder 
+StringBuffer 线程安全
 
 
 
 
 
-
+redis 事务执行出错了，会继续执行。
 
 
 
