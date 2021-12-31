@@ -1,0 +1,49 @@
+Control + Option + H 显示调用层次结构
+F4 + 方向键下 编辑/查看代码源
+
+
+
+eclipse macOS
+
+ctrl + h。  control + h
+
+command + option + 箭头
+
+
+Cmd + Shift + T: 打开类型>显示"Open Type Hierarchy"对话框来在编辑器中打开类型。比如类、接口等。
+
+Cmd + Shift + R: 打开资源>打开"Open Resource"对话框以打开工作空间中的任何资源。输入你想查找的文件或者通配符既可。
+
+
+文件内搜索 cmd + k
+
+control + option + h。查看调用当前方法的方法
+
+macos
+
+command + shift + f 全局查找
+
+fn + option（alt） + F7 查看调用当前方法的方法
+
+大小写转换 command + shift + u
+
+文件内查找 command + f
+
+shift  两次敲击
+
+复制一行 ctrl + D
+
+
+二、代码右移：TAB键
+
+三、代码左移：shift+TAB键
+
+四、代码上移：shift + option（alt） + 方向键上
+
+五、代码下移：shift + option（alt） + 方向键下
+
+代码对其 command + option + L
+
+
+ifconfig | grep "inet"
+
